@@ -243,6 +243,26 @@ class NutoraAuthEngine {
     return this.currentUser && (this.currentUser.role === 'editor' || this.currentUser.role === 'super_admin');
   }
 
+  detectRoleByEmail(email) {
+    if (!email || !email.includes('@')) return null;
+    const clean = email.trim().toLowerCase();
+    const users = this.getUsers();
+    const user = users.find(u => u.email === clean);
+    if (user) {
+      return {
+        role: user.role,
+        fullName: user.fullName,
+        isRegistered: true
+      };
+    }
+    // Any other or unverified email is customer
+    return {
+      role: 'customer',
+      fullName: null,
+      isRegistered: false
+    };
+  }
+
   isSuperAdminConfigured() {
     return localStorage.getItem('nutora_super_admin_configured') === 'true';
   }
