@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details — NUTORA Homemade Foods</title>
+  
+  <link rel="icon" type="image/png" href="assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/storefront.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .product-detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      padding: 56px 0 80px;
+    }
+
+    .detail-gallery {
+      position: sticky;
+      top: 104px;
+    }
+
+    .gallery-main-img-box {
+      background: #FFFDF8;
+      border: 1px solid var(--color-light-border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .gallery-main-img {
+      max-height: 440px;
+      width: 100%;
+      object-fit: contain;
+      border-radius: var(--radius-lg);
+    }
+
+    .variant-selector-group {
+      margin: 24px 0;
+    }
+
+    .variant-pills {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .variant-pill {
+      padding: 10px 18px;
+      border: 1.5px solid var(--color-light-border);
+      border-radius: var(--radius-pill);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-deep-green);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      background: white;
+    }
+
+    .variant-pill:hover, .variant-pill.active {
+      border-color: var(--color-forest-green);
+      background: #F2F8F4;
+      color: var(--color-forest-green);
+    }
+
+    .qty-stepper {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--color-light-border);
+      border-radius: var(--radius-pill);
+      padding: 4px;
+      background: white;
+      width: fit-content;
+    }
+
+    .qty-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-circle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--color-deep-green);
+      background: var(--color-cream);
+    }
+
+    .qty-btn:hover {
+      background: var(--color-warm-gold-light);
+    }
+
+    .qty-number {
+      padding: 0 16px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      min-width: 32px;
+      text-align: center;
+    }
+
+    .detail-tabs-section {
+      padding: 48px 0;
+      border-top: 1px solid var(--color-light-border);
+      margin-top: 32px;
+    }
+
+    .tab-nav {
+      display: flex;
+      gap: 24px;
+      border-bottom: 2px solid var(--color-light-border);
+      margin-bottom: 28px;
+    }
+
+    .tab-btn {
+      padding: 12px 6px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--color-muted-text);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .tab-btn.active {
+      color: var(--color-forest-green);
+    }
+
+    .tab-btn.active::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--color-forest-green);
+      border-radius: 3px;
+    }
+
+    @media (max-width: 900px) {
+      .product-detail-layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .detail-gallery {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <aside class="announcement-bar">
+    <div class="container announcement-content">
+      <span>🌿 <strong>Fresh Kitchen Batches:</strong> Free delivery on Dhaka orders over ৳1,500!</span>
+      <span class="announcement-highlight">Cash on Delivery across Bangladesh</span>
+    </div>
+  </aside>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link" aria-label="NUTORA Homepage">
+        <img src="assets/brand/nutora-logo.png" alt="NUTORA Logo" class="brand-emblem" width="62" height="62">
+        <div class="brand-typography">
+          <span class="brand-name">NUTORA</span>
+          <span class="brand-tagline">Straight Out of Mother's Kitchen</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link active">Shop</a>
+        <a href="about.html" class="nav-link">Our Story</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="account.html" class="btn-icon" title="Customer Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </a>
+        <button id="cartBtn" class="btn-icon cart-btn" aria-label="View basket">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span id="cartCount" class="cart-count">0</span>
+        </button>
+        <a href="checkout.html" class="btn btn-primary btn-sm">Checkout</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Product Details Container -->
+  <main class="container">
+    <div id="productDetailContainer" class="product-detail-layout">
+      <!-- Populated via Javascript -->
+      <div style="grid-column: 1 / -1; text-align: center; padding: 60px;">
+        <p>Loading fresh kitchen batch...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Interactive Cart Drawer -->
+  <div id="cartDrawerOverlay" class="cart-drawer-overlay"></div>
+  <aside id="cartDrawer" class="cart-drawer" role="dialog" aria-modal="true">
+    <div class="cart-drawer-header">
+      <h3 class="cart-drawer-title">Your Kitchen Basket</h3>
+      <button id="closeCartDrawer" class="cart-drawer-close">&times;</button>
+    </div>
+    <div id="cartDrawerItems" class="cart-drawer-body"></div>
+    <div class="cart-drawer-footer">
+      <div class="cart-drawer-subtotal">
+        <span>Subtotal:</span>
+        <span id="cartDrawerSubtotal" style="color: var(--color-forest-green);">৳0</span>
+      </div>
+      <a href="checkout.html" class="btn btn-primary" style="width: 100%;">Proceed to Checkout</a>
+    </div>
+  </aside>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 NUTORA Homemade Foods. All rights reserved. Made with love in Bangladesh.</div>
+      <div style="display: flex; gap: 20px;">
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="shipping-policy.html">Shipping</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    let currentQty = 1;
+    let activeProduct = null;
+    let selectedVariantPriceAdj = 0;
+
+    async function loadProductDetail() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const prodId = urlParams.get('id') || 'prod-001';
+
+      const product = await nutoraDB.getProductById(prodId) || DEMO_PRODUCTS[0];
+      activeProduct = product;
+
+      document.title = `${product.name} — NUTORA Homemade Foods`;
+
+      const container = document.getElementById('productDetailContainer');
+      container.innerHTML = `
+        <!-- Media Gallery -->
+        <div class="detail-gallery">
+          <div class="gallery-main-img-box">
+            <img id="mainProductImg" src="${product.image}" alt="${product.name}" class="gallery-main-img">
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <img src="${product.image}" alt="Thumbnail" style="width: 80px; height: 80px; border-radius: 8px; border: 2px solid var(--color-forest-green); object-fit: cover; cursor: pointer;">
+          </div>
+        </div>
+
+        <!-- Info & Buy Actions -->
+        <div>
+          <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <span class="badge badge-green">100% Homemade</span>
+            <span class="badge badge-gold">Mother's Kitchen</span>
+          </div>
+
+          <h1 style="font-size: 2.2rem; margin-bottom: 10px; color: var(--color-deep-green);">${product.name}</h1>
+          <div style="font-size: 0.95rem; color: var(--color-muted-text); margin-bottom: 16px;">
+            SKU: <strong style="color: var(--color-deep-green);">${product.id.toUpperCase()}</strong> • Weight: <strong>${product.weight}</strong>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+            <span class="stars" style="font-size: 1.1rem;">★★★★★</span>
+            <span style="font-size: 0.9rem; font-weight: 600; color: var(--color-deep-green);">5.0</span>
+            <span style="font-size: 0.85rem; color: var(--color-muted-text);">(${product.reviewCount || 38} genuine customer reviews)</span>
+          </div>
+
+          <div style="margin-bottom: 24px; padding: 18px 24px; background: #FFF9EB; border-radius: var(--radius-md); border: 1px solid var(--color-light-border); display: flex; align-items: baseline; gap: 14px;">
+            <span id="detailPriceDisplay" style="font-size: 2rem; font-weight: 800; color: var(--color-forest-green);">৳${product.price}</span>
+            ${product.originalPrice ? `<span style="font-size: 1.1rem; color: var(--color-subtle-text); text-decoration: line-through;">৳${product.originalPrice}</span>` : ''}
+            <span style="font-size: 0.85rem; color: var(--color-success); font-weight: 700; margin-left: auto;">In Stock • Fresh Batch</span>
+          </div>
+
+          <p style="font-size: 1.05rem; line-height: 1.65; color: var(--color-body-text); margin-bottom: 24px;">
+            ${product.description}
+          </p>
+
+          <!-- Variant Selector -->
+          <div class="variant-selector-group">
+            <label style="font-size: 0.9rem; font-weight: 700; color: var(--color-deep-green);">Select Jar Size / Variant:</label>
+            <div class="variant-pills">
+              <button class="variant-pill active" onclick="selectVariant(0, this, '${product.weight}')">${product.weight} (Standard)</button>
+              <button class="variant-pill" onclick="selectVariant(450, this, 'Family Pack')">Family Size (+৳450)</button>
+            </div>
+          </div>
+
+          <!-- Quantity Stepper & Buttons -->
+          <div style="display: flex; align-items: center; gap: 16px; margin: 32px 0; flex-wrap: wrap;">
+            <div class="qty-stepper">
+              <button class="qty-btn" onclick="updateQty(-1)">&minus;</button>
+              <span id="qtyVal" class="qty-number">1</span>
+              <button class="qty-btn" onclick="updateQty(1)">&plus;</button>
+            </div>
+
+            <button onclick="addToBasketWithQty()" class="btn btn-primary btn-lg" style="flex-grow: 1;">
+              Add to Kitchen Basket
+            </button>
+            <button onclick="buyNowAction()" class="btn btn-gold btn-lg" style="flex-grow: 1;">
+              Buy Now (Instant Checkout)
+            </button>
+          </div>
+
+          <!-- Fast Perks Card -->
+          <div style="padding: 18px; border-radius: var(--radius-md); background: white; border: 1px solid var(--color-light-border); font-size: 0.88rem; color: var(--color-muted-text); display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>🚚 <strong>Dhaka:</strong> 24-48 Hours Delivery</div>
+            <div>💵 <strong>Payment:</strong> Cash on Delivery</div>
+            <div>🌿 <strong>Ingredients:</strong> 100% Chemical-free</div>
+            <div>🏺 <strong>Packaging:</strong> Food-grade Glass Jar</div>
+          </div>
+        </div>
+
+        <!-- Details Tabs: Ingredients, Storage, Story -->
+        <div class="detail-tabs-section" style="grid-column: 1 / -1;">
+          <div class="tab-nav">
+            <span class="tab-btn active" onclick="switchTab('ingredients', this)">Ingredients & Nutrition</span>
+            <span class="tab-btn" onclick="switchTab('storage', this)">Storage Instructions</span>
+            <span class="tab-btn" onclick="switchTab('reviews', this)">Kitchen Reviews</span>
+          </div>
+
+          <div id="tabContent" style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--color-light-border); padding: 32px;">
+            <h3 style="margin-bottom: 12px; color: var(--color-deep-green);">Pure Wholesome Ingredients</h3>
+            <p style="color: var(--color-body-text); margin-bottom: 16px;">
+              Hand-selected natural raw ingredients sourced directly from trusted local growers and wild mangrove forests.
+              Never chemically bleached, refined, or padded with artificial stabilizers.
+            </p>
+            <ul style="list-style: disc; margin-left: 20px; color: var(--color-muted-text); line-height: 1.7;">
+              <li>Zero added palm fat or hydrogenated oils</li>
+              <li>Preserved naturally with pure honey or cold-pressed mustard oil</li>
+              <li>Small batches slow-churned weekly</li>
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    function selectVariant(priceAdj, el, label) {
+      document.querySelectorAll('.variant-pill').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      selectedVariantPriceAdj = priceAdj;
+      const base = activeProduct.price;
+      const current = base + priceAdj;
+      document.getElementById('detailPriceDisplay').textContent = `৳${current}`;
+    }
+
+    function updateQty(delta) {
+      currentQty = Math.max(1, currentQty + delta);
+      document.getElementById('qtyVal').textContent = currentQty;
+    }
+
+    function addToBasketWithQty() {
+      if (!activeProduct) return;
+      const finalPrice = activeProduct.price + selectedVariantPriceAdj;
+      cart.addItem({
+        ...activeProduct,
+        price: finalPrice
+      }, currentQty);
+      showToast(`Added ${currentQty}x ${activeProduct.name} to basket!`, '🌿');
+      openCartDrawer();
+    }
+
+    function buyNowAction() {
+      addToBasketWithQty();
+      window.location.href = 'checkout.html';
+    }
+
+    function switchTab(tab, el) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      const box = document.getElementById('tabContent');
+
+      if (tab === 'ingredients') {
+        box.innerHTML = `
+          <h3 style="margin-bottom: 12px; color: var(--color-deep-green);">Pure Wholesome Ingredients</h3>
+          <p style="color: var(--color-body-text); margin-bottom: 16px;">
+            Hand-selected natural raw ingredients sourced directly from trusted local growers and wild mangrove forests.
+          </p>
+          <ul style="list-style: disc; margin-left: 20px; color: var(--color-muted-text); line-height: 1.7;">
+            <li>Zero added palm fat or hydrogenated oils</li>
+            <li>No artificial colors, essence, or chemical preservatives</li>
+            <li>Small batches slow-churned weekly</li>
+          </ul>
+        `;
+      } else if (tab === 'storage') {
+        box.innerHTML = `
+          <h3 style="margin-bottom: 12px; color: var(--color-deep-green);">Storage & Handling</h3>
+          <p style="color: var(--color-body-text); line-height: 1.65;">
+            Store at cool room temperature away from direct sunlight. Always use a clean and dry spoon to ensure optimum shelf life. Natural oil separation may occur in unadulterated nut butters and honey; simply stir thoroughly before consumption.
+          </p>
+        `;
+      } else if (tab === 'reviews') {
+        box.innerHTML = `
+          <h3 style="margin-bottom: 12px; color: var(--color-deep-green);">Customer Feedback</h3>
+          <p style="color: var(--color-muted-text); margin-bottom: 20px;">
+            Verified feedback from customers across Dhaka and Bangladesh.
+          </p>
+          <div style="border-left: 3px solid var(--color-honey-gold); padding-left: 16px; margin-bottom: 16px;">
+            <div style="color: #F4C34F; font-size: 0.9rem;">★★★★★</div>
+            <p style="font-weight: 600; color: var(--color-deep-green); margin: 4px 0;">"The taste is genuinely homemade. My kids love it!"</p>
+            <span style="font-size: 0.8rem; color: var(--color-muted-text);">— Farzana H., Dhanmondi (Verified Customer)</span>
+          </div>
+        `;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadProductDetail);
+  </script>
+</body>
+</html>

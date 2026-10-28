@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Login — NUTORA Homemade Foods</title>
+  
+  <link rel="icon" type="image/png" href="assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/storefront.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .auth-container {
+      max-width: 460px;
+      margin: 64px auto 96px;
+      padding: 40px;
+      background: white;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-light-border);
+      box-shadow: var(--shadow-md);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link" aria-label="NUTORA Homepage">
+        <img src="assets/brand/nutora-logo.png" alt="NUTORA Logo" class="brand-emblem" width="62" height="62">
+        <div class="brand-typography">
+          <span class="brand-name">NUTORA</span>
+          <span class="brand-tagline">Straight Out of Mother's Kitchen</span>
+        </div>
+      </a>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="register.html" class="btn btn-outline btn-sm">Create Account</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="auth-container">
+      <div style="text-align: center; margin-bottom: 28px;">
+        <span class="section-tag">Welcome Back</span>
+        <h1 style="font-size: 1.85rem; color: var(--color-deep-green); margin-top: 6px;">Sign In to Nutora</h1>
+        <p style="font-size: 0.9rem; color: var(--color-muted-text); margin-top: 4px;">
+          Access your kitchen orders, saved addresses & family perks.
+        </p>
+      </div>
+
+      <div id="authAlert" style="display: none; padding: 12px; border-radius: 8px; margin-bottom: 18px; font-size: 0.88rem;"></div>
+
+      <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+        <div style="margin-bottom: 18px;">
+          <label style="display: block; font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">
+            Email Address
+          </label>
+          <input type="email" id="loginEmail" required class="newsletter-input" style="width: 100%; border-radius: var(--radius-md);" placeholder="e.g. shuharthu@example.com">
+        </div>
+
+        <div style="margin-bottom: 22px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <label style="font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green);">Password</label>
+            <a href="#" onclick="alert('Password reset link will be sent to your email.'); return false;" style="font-size: 0.82rem; color: var(--color-forest-green); text-decoration: underline;">Forgot?</a>
+          </div>
+          <input type="password" id="loginPassword" required class="newsletter-input" style="width: 100%; border-radius: var(--radius-md);" placeholder="••••••••">
+        </div>
+
+        <button type="submit" id="btnLogin" class="btn btn-primary" style="width: 100%; font-size: 1.05rem; padding: 14px;">
+          Sign In
+        </button>
+      </form>
+
+      
+
+      <div style="text-align: center; margin-top: 24px; font-size: 0.9rem; color: var(--color-muted-text);">
+        Don't have an account yet? <a href="register.html" style="color: var(--color-forest-green); font-weight: 700;">Join Mother's Kitchen &rarr;</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 NUTORA Homemade Foods. All rights reserved.</div>
+      <div style="display: flex; gap: 20px;">
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    function fillCreds(email) {
+      document.getElementById('loginEmail').value = email;
+      document.getElementById('loginPassword').value = 'password123';
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPassword').value;
+      const alertBox = document.getElementById('authAlert');
+      const btn = document.getElementById('btnLogin');
+
+      btn.disabled = true;
+      btn.textContent = 'Verifying credentials...';
+
+      try {
+        const user = await nutoraAuth.login(email, pass);
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#E8F5E9';
+        alertBox.style.color = '#17452F';
+        alertBox.textContent = `✓ Logged in as ${user.fullName} (${user.role.toUpperCase()})`;
+
+        setTimeout(() => {
+          if (user.role === 'super_admin' || user.role === 'editor') {
+            window.location.href = 'admin/index.html';
+          } else {
+            window.location.href = 'account.html';
+          }
+        }, 800);
+      } catch (err) {
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#FFEBEE';
+        alertBox.style.color = '#C0392B';
+        alertBox.textContent = err.message || 'Login failed. Please check your credentials.';
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+      }
+    }
+  </script>
+</body>
+</html>

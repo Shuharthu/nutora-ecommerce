@@ -1,0 +1,77 @@
+/* ==========================================================================
+   NUTORA — BRAND DESIGN SYSTEM & TOKENS
+   Master Color Palette & Visual Standards
+   ========================================================================== */
+
+:root {
+  /* Brand Core Colors */
+  --color-forest-green: #17452F;
+  --color-forest-green-hover: #1E563B;
+  --color-deep-green: #103523;
+  --color-deep-green-dark: #0A2317;
+  
+  --color-honey-gold: #D99A24;
+  --color-honey-gold-hover: #C5881A;
+  --color-warm-gold: #F4C34F;
+  --color-warm-gold-light: #FDF3D6;
+  
+  --color-cream: #FFF9EB;
+  --color-cream-subtle: #FAF4E5;
+  --color-cream-card: #FFFFFF;
+  --color-warm-white: #FFFFFF;
+  
+  --color-peanut-brown: #4A2616;
+  --color-peanut-brown-light: #7A4226;
+  
+  --color-body-text: #282821;
+  --color-muted-text: #746D60;
+  --color-subtle-text: #968F80;
+  
+  --color-light-border: #E8DFCC;
+  --color-border-hover: #D5C8AF;
+  
+  /* Status Colors */
+  --color-success: #1C7947;
+  --color-warning: #E28711;
+  --color-danger: #C0392B;
+  --color-info: #2B6CB0;
+
+  /* Typography */
+  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Spacing Scale */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+  --radius-circle: 50%;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 6px rgba(23, 69, 47, 0.05);
+  --shadow-md: 0 8px 24px rgba(23, 69, 47, 0.08);
+  --shadow-lg: 0 16px 40px rgba(23, 69, 47, 0.12);
+  --shadow-glow: 0 0 24px rgba(217, 154, 36, 0.28);
+  --shadow-card: 0 4px 20px rgba(74, 38, 22, 0.06);
+
+  /* Transitions */
+  --transition-fast: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Container */
+  --container-max: 1380px;
+  --container-pad: 24px;
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Our Kitchen — NUTORA</title>
+  
+  <link rel="icon" type="image/png" href="assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/storefront.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link">
+        <img src="assets/brand/nutora-logo.png" alt="NUTORA Logo" class="brand-emblem" width="62" height="62">
+        <div class="brand-typography">
+          <span class="brand-name">NUTORA</span>
+          <span class="brand-tagline">Straight Out of Mother's Kitchen</span>
+        </div>
+      </a>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="about.html" class="nav-link">Our Story</a>
+        <a href="contact.html" class="nav-link active">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="shop.html" class="btn btn-primary btn-sm">Shop Now</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 64px 24px 96px;">
+    <div style="text-align: center; margin-bottom: 48px;">
+      <span class="section-tag">Get in Touch</span>
+      <h1 style="font-size: 2.6rem; margin: 12px 0 16px; color: var(--color-deep-green);">We'd Love to Hear From You</h1>
+      <p style="font-size: 1.1rem; color: var(--color-muted-text); max-width: 600px; margin: 0 auto;">
+        Have questions about our fresh batches, bulk corporate hampers, or custom homemade preparations? Reach out directly.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 980px; margin: 0 auto;">
+      <!-- Contact Info Card -->
+      <div style="background: white; border-radius: var(--radius-xl); border: 1px solid var(--color-light-border); padding: 40px;">
+        <h3 style="font-size: 1.4rem; color: var(--color-deep-green); margin-bottom: 24px;">Dhaka Kitchen Office</h3>
+
+        <div style="margin-bottom: 24px;">
+          <strong style="display: block; color: var(--color-deep-green); margin-bottom: 4px;">📍 Kitchen Address:</strong>
+          <span style="color: var(--color-muted-text);">House 42, Road 11, Block D, Banani, Dhaka - 1213, Bangladesh</span>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <strong style="display: block; color: var(--color-deep-green); margin-bottom: 4px;">📞 WhatsApp & Calls:</strong>
+          <span style="color: var(--color-forest-green); font-weight: 700;">+880 1712-345678</span>
+          <div style="font-size: 0.84rem; color: var(--color-muted-text); margin-top: 2px;">Daily 9:00 AM – 8:00 PM</div>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <strong style="display: block; color: var(--color-deep-green); margin-bottom: 4px;">✉️ Email Inquiries:</strong>
+          <span style="color: var(--color-forest-green);">hello@nutorafood.com</span>
+        </div>
+
+        <div style="padding: 16px; background: #FFF9EB; border-radius: 8px; border: 1px solid var(--color-light-border); font-size: 0.88rem; color: var(--color-peanut-brown);">
+          🌿 <strong>Nationwide Delivery:</strong> Fresh batches dispatched daily to Dhaka, Chittagong, Sylhet, and all 64 districts with Cash on Delivery.
+        </div>
+      </div>
+
+      <!-- Contact Message Form -->
+      <div style="background: white; border-radius: var(--radius-xl); border: 1px solid var(--color-light-border); padding: 40px;">
+        <h3 style="font-size: 1.4rem; color: var(--color-deep-green); margin-bottom: 20px;">Send Mother's Kitchen a Message</h3>
+
+        <form onsubmit="handleContactSubmit(event)">
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">Your Name *</label>
+            <input type="text" id="cntName" required class="newsletter-input" style="width: 100%; border-radius: var(--radius-md);" placeholder="e.g. Shuharthu Barua">
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">Phone Number *</label>
+            <input type="tel" id="cntPhone" required class="newsletter-input" style="width: 100%; border-radius: var(--radius-md);" placeholder="e.g. 01712345678">
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <label style="display: block; font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">Your Message or Inquiry *</label>
+            <textarea id="cntMsg" required rows="4" class="newsletter-input" style="width: 100%; border-radius: var(--radius-md);" placeholder="Tell us how we can help you..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 NUTORA Homemade Foods. All rights reserved.</div>
+      <div style="display: flex; gap: 20px;">
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="shipping-policy.html">Shipping</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script>
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      alert('Thank you for reaching out! A member of our Dhaka kitchen team will connect with you via phone or WhatsApp.');
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Roles & Access Security — NUTORA Admin</title>
+  
+  <link rel="icon" type="image/png" href="../assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <aside class="admin-sidebar">
+    <div class="admin-brand-box">
+      <img src="../assets/brand/nutora-logo.png" alt="NUTORA Logo" class="admin-brand-logo">
+      <div>
+        <div style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; color: #FFF9EB;">NUTORA</div>
+        <span style="font-size: 0.72rem; color: var(--color-warm-gold); letter-spacing: 0.05em; text-transform: uppercase;">Kitchen Admin</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <a href="index.html" class="admin-nav-item">📊 Dashboard</a>
+      <a href="products.html" class="admin-nav-item">🍯 Products</a>
+      <a href="categories.html" class="admin-nav-item">📁 Categories</a>
+      <a href="inventory.html" class="admin-nav-item">📦 Inventory & Stock</a>
+      <a href="orders.html" class="admin-nav-item">🛒 Orders</a>
+      <a href="customers.html" class="admin-nav-item">👥 Customers</a>
+      <a href="coupons.html" class="admin-nav-item">🎟️ Coupons</a>
+      <a href="reviews.html" class="admin-nav-item">⭐ Reviews</a>
+      <a href="users.html" class="admin-nav-item active">🛡️ User Roles</a>
+      <a href="settings.html" class="admin-nav-item">⚙️ Store Settings</a>
+      <a href="audit-logs.html" class="admin-nav-item">📜 Audit Logs</a>
+    </nav>
+
+    <div class="admin-user-pill">
+      <!-- Populated via admin-core.js -->
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div>
+        <h1 style="font-size: 1.45rem; color: var(--color-deep-green);">Administrative Roles & Access Security</h1>
+        <span style="font-size: 0.85rem; color: var(--color-muted-text);">Only Super Admin has authority to create, configure, or deactivate staff accounts</span>
+      </div>
+      <div class="admin-topbar-actions">
+        <button onclick="openCreateStaffModal()" class="btn btn-primary btn-sm">+ Create New Staff Account</button>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <div style="padding: 16px 20px; background: #FFF9EB; border-left: 4px solid var(--color-honey-gold); border-radius: 6px; margin-bottom: 24px; font-size: 0.88rem; color: var(--color-peanut-brown); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <strong>🛡️ Super Admin Protection Policy Active:</strong> সাধারণ ব্যবহারকারী বা ভিজিটররা এই প্যানেলে কোনো অ্যাকাউন্ট তৈরি করতে পারবে না। কেবলমাত্র আপনি (সুপার অ্যাডমিন) নতুন অ্যাডমিন বা এডিটর তৈরি করতে পারবেন।
+        </div>
+        <button onclick="window.nutoraAdmin.openSuperAdminModal()" class="btn btn-gold btn-sm" style="font-size: 0.78rem;">
+          👑 Edit My Super Admin Profile
+        </button>
+      </div>
+
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <div>
+            <h3 style="font-size: 1.15rem; color: var(--color-deep-green); margin: 0;">Staff & Administrative Accounts</h3>
+            <span style="font-size: 0.82rem; color: var(--color-muted-text);">Active team members with administrative system access</span>
+          </div>
+          <button onclick="openCreateStaffModal()" class="btn btn-secondary btn-sm">+ Add Staff</button>
+        </div>
+
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Email Address</th>
+                <th>Phone</th>
+                <th>Role</th>
+                <th>Permissions & Scope</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Create Staff Account Modal -->
+  <div id="createStaffModal" class="admin-modal-overlay">
+    <div class="admin-modal" style="max-width: 520px;">
+      <div class="admin-modal-header" style="background: var(--color-deep-green); color: white; border-radius: var(--radius-lg) var(--radius-lg) 0 0;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.3rem;">🛡️</span>
+          <div>
+            <h3 style="color: #FFF9EB; font-size: 1.15rem; margin: 0;">Create Administrative Account</h3>
+            <span style="font-size: 0.76rem; color: var(--color-warm-gold);">Super Admin Authorization Required</span>
+          </div>
+        </div>
+        <button onclick="closeCreateStaffModal()" style="font-size: 1.5rem; color: #FFF9EB; background: none; border: none; cursor: pointer;">&times;</button>
+      </div>
+
+      <form onsubmit="handleCreateStaff(event)">
+        <div class="admin-modal-body">
+          <div id="createStaffAlert" style="display: none; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 0.85rem;"></div>
+
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Full Name (নাম) *</label>
+            <input type="text" id="csName" required class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. Asif Rahman">
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Email Address (অফিশিয়াল ইমেইল) *</label>
+            <input type="email" id="csEmail" required class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. asif@nutorafood.com">
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Phone Number (ফোন)</label>
+            <input type="tel" id="csPhone" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. 01712345678">
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Initial Password (পাসওয়ার্ড — সর্বনিম্ন ৮ অক্ষর) *</label>
+            <input type="password" id="csPassword" required minlength="8" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="••••••••">
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Administrative Role *</label>
+            <select id="csRole" class="newsletter-input" style="width: 100%; border-radius: 6px; padding: 10px;">
+              <option value="editor">Editor — Can add/edit products, manage catalog & update inventory</option>
+              <option value="super_admin">Super Admin — Full supreme authority across all modules & settings</option>
+            </select>
+          </div>
+
+          <p style="font-size: 0.78rem; color: var(--color-muted-text); margin: 0; line-height: 1.4;">
+            🛡️ সাধারণ ভিজিটররা কখনোই অ্যাডমিন রোল নিয়ে রেজিস্ট্রেশন করতে পারে না। শুধুমাত্র আপনি এখান থেকে নতুন স্টাফ তৈরি করতে পারবেন।
+          </p>
+        </div>
+
+        <div class="admin-modal-footer">
+          <button type="button" onclick="closeCreateStaffModal()" class="btn btn-secondary btn-sm">Cancel</button>
+          <button type="submit" id="btnSubmitCreateStaff" class="btn btn-primary btn-sm">Create Staff Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-core.js"></script>
+
+  <script>
+    function renderStaffUsers() {
+      const allUsers = nutoraAuth.getUsers();
+      // Filter staff only
+      const staffList = allUsers.filter(u => u.role === 'super_admin' || u.role === 'editor');
+      const tbody = document.getElementById('usersTableBody');
+
+      if (staffList.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; color: var(--color-muted-text); padding: 32px;">
+              No staff members recorded. Click "+ Create New Staff Account" to invite an editor.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = staffList.map(u => {
+        const isSuper = u.role === 'super_admin';
+        const isSelf = nutoraAuth.currentUser && nutoraAuth.currentUser.id === u.id;
+        const isActive = u.isActive !== false;
+
+        return `
+          <tr>
+            <td>
+              <div style="font-weight: 700; color: var(--color-deep-green);">
+                ${u.fullName || 'Staff Member'} ${isSelf ? '<span class="badge" style="background: rgba(23,69,47,0.1); color: var(--color-forest-green); font-size: 0.65rem; margin-left: 4px;">YOU</span>' : ''}
+              </div>
+            </td>
+            <td style="font-family: monospace; font-size: 0.88rem;">${u.email}</td>
+            <td style="font-size: 0.85rem; color: var(--color-muted-text);">${u.phone || '—'}</td>
+            <td>
+              <span class="badge ${isSuper ? 'badge-gold' : 'badge-green'}" style="font-size: 0.72rem;">
+                ${isSuper ? 'SUPER ADMIN' : 'EDITOR'}
+              </span>
+            </td>
+            <td style="font-size: 0.82rem; color: var(--color-muted-text);">
+              ${isSuper ? 'Full Store & Team Authority' : 'Products, Inventory & Catalog Drafting'}
+            </td>
+            <td>
+              <span class="badge ${isActive ? 'badge-green' : 'badge-red'}" style="font-size: 0.72rem;">
+                ${isActive ? 'Active' : 'Deactivated'}
+              </span>
+            </td>
+            <td>
+              ${isSelf ? `
+                <button onclick="window.nutoraAdmin.openSuperAdminModal()" class="btn btn-outline btn-sm" style="padding: 4px 10px; font-size: 0.78rem;">
+                  Edit Profile
+                </button>
+              ` : `
+                <button onclick="toggleUserStatus('${u.id}', ${!isActive})" class="btn btn-outline btn-sm" style="padding: 4px 10px; font-size: 0.78rem; color: ${isActive ? 'var(--color-danger)' : 'var(--color-success)'}; border-color: ${isActive ? 'var(--color-danger)' : 'var(--color-success)'};">
+                  ${isActive ? 'Deactivate' : 'Activate'}
+                </button>
+              `}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openCreateStaffModal() {
+      document.getElementById('csName').value = '';
+      document.getElementById('csEmail').value = '';
+      document.getElementById('csPhone').value = '';
+      document.getElementById('csPassword').value = '';
+      const alertBox = document.getElementById('createStaffAlert');
+      if (alertBox) alertBox.style.display = 'none';
+      document.getElementById('createStaffModal').classList.add('active');
+    }
+
+    function closeCreateStaffModal() {
+      document.getElementById('createStaffModal').classList.remove('active');
+    }
+
+    async function handleCreateStaff(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmitCreateStaff');
+      const alertBox = document.getElementById('createStaffAlert');
+
+      const name = document.getElementById('csName').value.trim();
+      const email = document.getElementById('csEmail').value.trim();
+      const phone = document.getElementById('csPhone').value.trim();
+      const pass = document.getElementById('csPassword').value;
+      const role = document.getElementById('csRole').value;
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Creating Account...';
+
+        await nutoraAuth.createStaffAccount(name, email, phone, pass, role);
+
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#E8F5E9';
+        alertBox.style.color = '#2E7D32';
+        alertBox.style.border = '1px solid #C8E6C9';
+        alertBox.textContent = `✓ Staff account for ${name} (${role.toUpperCase()}) created successfully!`;
+
+        renderStaffUsers();
+
+        setTimeout(() => {
+          closeCreateStaffModal();
+          btn.disabled = false;
+          btn.textContent = 'Create Staff Account';
+        }, 1000);
+      } catch (err) {
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#FFEBEE';
+        alertBox.style.color = '#C62828';
+        alertBox.style.border = '1px solid #FFCDD2';
+        alertBox.textContent = err.message || 'Failed to create staff account.';
+        btn.disabled = false;
+        btn.textContent = 'Create Staff Account';
+      }
+    }
+
+    async function toggleUserStatus(id, newStatus) {
+      const allUsers = nutoraAuth.getUsers();
+      const target = allUsers.find(u => u.id === id);
+      if (!target) return;
+
+      const action = newStatus ? 'Activate' : 'Deactivate';
+      if (!confirm(`Are you sure you want to ${action.toLowerCase()} access for ${target.fullName || target.email}?`)) {
+        return;
+      }
+
+      try {
+        await nutoraAuth.updateStaffStatus(id, newStatus);
+        renderStaffUsers();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderStaffUsers();
+    });
+  </script>
+</body>
+</html>

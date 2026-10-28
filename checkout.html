@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — NUTORA Homemade Foods</title>
+  
+  <link rel="icon" type="image/png" href="assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/storefront.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 48px;
+      padding: 56px 0 80px;
+    }
+
+    .form-section {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-light-border);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .form-section-title {
+      font-size: 1.22rem;
+      margin-bottom: 20px;
+      color: var(--color-deep-green);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--color-deep-green);
+    }
+
+    .form-control {
+      padding: 12px 16px;
+      border: 1.5px solid var(--color-light-border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      background: white;
+      transition: border-color var(--transition-fast);
+    }
+
+    .form-control:focus {
+      border-color: var(--color-forest-green);
+      outline: none;
+    }
+
+    .payment-option-card {
+      border: 1.5px solid var(--color-light-border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .payment-option-card.selected {
+      border-color: var(--color-forest-green);
+      background: #F4F8F5;
+    }
+
+    .order-summary-box {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-light-border);
+      padding: 28px;
+      position: sticky;
+      top: 104px;
+    }
+
+    .order-item-mini {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--color-light-border);
+    }
+
+    @media (max-width: 900px) {
+      .checkout-layout {
+        grid-template-columns: 1fr;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .order-summary-box {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link" aria-label="NUTORA Homepage">
+        <img src="assets/brand/nutora-logo.png" alt="NUTORA Logo" class="brand-emblem" width="62" height="62">
+        <div class="brand-typography">
+          <span class="brand-name">NUTORA</span>
+          <span class="brand-tagline">Straight Out of Mother's Kitchen</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="cart.html" class="nav-link">Basket</a>
+      </nav>
+
+      <div class="nav-actions">
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--color-forest-green);">🔒 Secure 256-Bit SSL Checkout</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Checkout Container -->
+  <main class="container">
+    <div id="checkoutMainView" class="checkout-layout">
+      <!-- Left: Delivery & Payment Details -->
+      <form id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+        <!-- 1. Customer Contact Details -->
+        <div class="form-section">
+          <h2 class="form-section-title">
+            <span>1.</span> Customer Contact Information
+          </h2>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label" for="custName">Full Name *</label>
+              <input type="text" id="custName" class="form-control" required placeholder="e.g. Shuharthu Barua">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="custPhone">Phone Number *</label>
+              <input type="tel" id="custPhone" class="form-control" required placeholder="e.g. 01712345678">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="custEmail">Email Address (Optional)</label>
+              <input type="email" id="custEmail" class="form-control" placeholder="e.g. name@example.com">
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Delivery Address in Bangladesh -->
+        <div class="form-section">
+          <h2 class="form-section-title">
+            <span>2.</span> Delivery Address in Bangladesh
+          </h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="custDivision">Division *</label>
+              <select id="custDivision" class="form-control" required onchange="handleDivisionChange(this.value)">
+                <option value="Dhaka" selected>Dhaka (৳70 delivery)</option>
+                <option value="Chittagong">Chittagong (৳130 delivery)</option>
+                <option value="Rajshahi">Rajshahi (৳130 delivery)</option>
+                <option value="Khulna">Khulna (৳130 delivery)</option>
+                <option value="Barisal">Barisal (৳130 delivery)</option>
+                <option value="Sylhet">Sylhet (৳130 delivery)</option>
+                <option value="Rangpur">Rangpur (৳130 delivery)</option>
+                <option value="Mymensingh">Mymensingh (৳130 delivery)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="custDistrict">District *</label>
+              <input type="text" id="custDistrict" class="form-control" required placeholder="e.g. Dhaka / Chittagong">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="custUpazila">Thana / Upazila / Area *</label>
+              <input type="text" id="custUpazila" class="form-control" required placeholder="e.g. Banani / Dhanmondi">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="custAddress">Full Street Address *</label>
+              <textarea id="custAddress" class="form-control" rows="2" required placeholder="House / Flat / Road / Landmark details"></textarea>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="custInstructions">Special Kitchen / Delivery Note (Optional)</label>
+              <input type="text" id="custInstructions" class="form-control" placeholder="e.g. Call before delivery, handle glass jars gently">
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Payment Method -->
+        <div class="form-section">
+          <h2 class="form-section-title">
+            <span>3.</span> Payment Method
+          </h2>
+
+          <label class="payment-option-card selected" id="optCOD">
+            <input type="radio" name="paymentMethod" value="cod" checked style="margin-top: 3px;" onchange="selectPayment('cod')">
+            <div>
+              <strong style="color: var(--color-deep-green); font-size: 1rem;">Cash on Delivery (Recommended)</strong>
+              <p style="font-size: 0.85rem; color: var(--color-muted-text); margin-top: 2px;">
+                Inspect your fresh sealed glass jars and pay our courier directly in cash upon doorstep delivery.
+              </p>
+            </div>
+          </label>
+
+          <label class="payment-option-card" id="optOnline">
+            <input type="radio" name="paymentMethod" value="online_sslcommerz" style="margin-top: 3px;" onchange="selectPayment('online')">
+            <div>
+              <strong style="color: var(--color-deep-green); font-size: 1rem;">Online Payment (bKash / Nagad / Cards)</strong>
+              <p style="font-size: 0.85rem; color: var(--color-muted-text); margin-top: 2px;">
+                Secured Bangladesh Payment Gateway (SSLCommerz integration boundary).
+              </p>
+            </div>
+          </label>
+        </div>
+
+        <button type="submit" id="btnPlaceOrder" class="btn btn-primary btn-lg" style="width: 100%; font-size: 1.15rem;">
+          Confirm & Place Order (Cash on Delivery)
+        </button>
+      </form>
+
+      <!-- Right: Live Order Summary -->
+      <aside class="order-summary-box">
+        <h3 style="font-size: 1.3rem; margin-bottom: 20px; color: var(--color-deep-green);">Order Items</h3>
+        
+        <div id="checkoutItemsList">
+          <!-- Populated via JS -->
+        </div>
+
+        <div style="margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--color-light-border);">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem;">
+            <span>Subtotal</span>
+            <strong id="chkSubtotal">৳0</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: var(--color-forest-green);" id="chkDiscountRow">
+            <span>Discount</span>
+            <strong id="chkDiscount">-৳0</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem;">
+            <span>Shipping Fee</span>
+            <strong id="chkShipping">৳70</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-top: 16px; padding-top: 14px; border-top: 2px dashed var(--color-light-border); font-size: 1.35rem; font-weight: 800; color: var(--color-forest-green);">
+            <span>Total Payable:</span>
+            <span id="chkTotal">৳0</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Order Success View (Hidden initially) -->
+    <div id="orderSuccessView" style="display: none; padding: 60px 0; max-width: 680px; margin: 0 auto; text-align: center;">
+      <div style="background: white; border-radius: var(--radius-xl); border: 2px solid var(--color-honey-gold); padding: 48px 36px; box-shadow: var(--shadow-lg);">
+        <div style="width: 72px; height: 72px; background: #E8F5E9; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 2.2rem; color: var(--color-forest-green);">
+          ✓
+        </div>
+        <span class="badge badge-gold" style="margin-bottom: 12px;">Order Received</span>
+        <h1 style="font-size: 2.2rem; color: var(--color-deep-green); margin-bottom: 8px;">Thank You for Your Order!</h1>
+        <p style="color: var(--color-muted-text); margin-bottom: 24px; font-size: 1.05rem;">
+          Our kitchen is preparing your fresh homemade batches with care.
+        </p>
+
+        <div style="background: #FFF9EB; border-radius: var(--radius-md); padding: 20px; border: 1px solid var(--color-light-border); text-align: left; margin-bottom: 28px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; color: var(--color-deep-green);">
+            <span>Order Number:</span>
+            <span id="successOrderNum" style="color: var(--color-forest-green); font-family: monospace; font-size: 1.1rem;">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem;">
+            <span>Recipient:</span>
+            <span id="successRecipient">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem;">
+            <span>Contact Phone:</span>
+            <span id="successPhone">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem;">
+            <span>Payment Method:</span>
+            <span>Cash on Delivery</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding-top: 10px; border-top: 1px dashed var(--color-light-border); font-size: 1.15rem; font-weight: 800; color: var(--color-forest-green);">
+            <span>Amount Due on Delivery:</span>
+            <span id="successTotal">৳0</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+          <button onclick="window.print()" class="btn btn-secondary">Print Receipt</button>
+          <a href="shop.html" class="btn btn-primary">Continue Shopping</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 NUTORA Homemade Foods. All rights reserved. Made with love in Bangladesh.</div>
+      <div style="display: flex; gap: 20px;">
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="shipping-policy.html">Shipping</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    let shippingRate = 70;
+    let appliedCoupon = null;
+
+    function renderCheckoutSummary() {
+      const container = document.getElementById('checkoutItemsList');
+      if (!container) return;
+
+      if (cart.items.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 20px; color: var(--color-muted-text);">
+            <p>Your basket is currently empty.</p>
+            <a href="shop.html" class="btn btn-secondary btn-sm" style="margin-top: 10px;">Return to Shop</a>
+          </div>
+        `;
+        document.getElementById('btnPlaceOrder').disabled = true;
+        return;
+      }
+
+      container.innerHTML = cart.items.map(item => `
+        <div class="order-item-mini">
+          <img src="${item.image}" alt="${item.name}" style="width: 52px; height: 52px; border-radius: 6px; object-fit: cover;">
+          <div style="flex-grow: 1;">
+            <div style="font-size: 0.92rem; font-weight: 700; color: var(--color-deep-green);">${item.name}</div>
+            <div style="font-size: 0.82rem; color: var(--color-muted-text);">${item.weight} &times; ${item.quantity}</div>
+          </div>
+          <div style="font-weight: 800; color: var(--color-forest-green); font-size: 0.98rem;">৳${item.price * item.quantity}</div>
+        </div>
+      `).join('');
+
+      const subtotal = cart.getSubtotal();
+      let discount = 0;
+
+      try {
+        const c = sessionStorage.getItem('nutora_coupon');
+        if (c) {
+          appliedCoupon = JSON.parse(c);
+          if (appliedCoupon.type === 'percentage') {
+            discount = Math.round(subtotal * (appliedCoupon.value / 100));
+          } else {
+            discount = appliedCoupon.value;
+          }
+        }
+      } catch (e) {}
+
+      // Free shipping threshold check (over ৳1,500 in Dhaka)
+      let actualShipping = shippingRate;
+      if (subtotal >= 1500 && shippingRate === 70) {
+        actualShipping = 0;
+      }
+
+      const total = Math.max(0, subtotal - discount) + actualShipping;
+
+      document.getElementById('chkSubtotal').textContent = `৳${subtotal}`;
+      
+      const discRow = document.getElementById('chkDiscountRow');
+      if (discount > 0) {
+        discRow.style.display = 'flex';
+        document.getElementById('chkDiscount').textContent = `-৳${discount}`;
+      } else {
+        discRow.style.display = 'none';
+      }
+
+      document.getElementById('chkShipping').textContent = actualShipping === 0 ? 'FREE' : `৳${actualShipping}`;
+      document.getElementById('chkTotal').textContent = `৳${total}`;
+    }
+
+    function handleDivisionChange(val) {
+      if (val === 'Dhaka') {
+        shippingRate = 70;
+      } else {
+        shippingRate = 130;
+      }
+      renderCheckoutSummary();
+    }
+
+    function selectPayment(mode) {
+      document.getElementById('optCOD').classList.toggle('selected', mode === 'cod');
+      document.getElementById('optOnline').classList.toggle('selected', mode === 'online');
+      const btn = document.getElementById('btnPlaceOrder');
+      if (mode === 'cod') {
+        btn.textContent = 'Confirm & Place Order (Cash on Delivery)';
+      } else {
+        btn.textContent = 'Proceed to Online Payment Gateway (bKash / Card)';
+      }
+    }
+
+    async function handlePlaceOrder(e) {
+      e.preventDefault();
+      if (cart.items.length === 0) {
+        alert('Your basket is empty. Please add items before placing an order.');
+        return;
+      }
+
+      const btn = document.getElementById('btnPlaceOrder');
+      btn.disabled = true;
+      btn.textContent = 'Processing Order with Mother\'s Kitchen...';
+
+      const custName = document.getElementById('custName').value.trim();
+      const custPhone = document.getElementById('custPhone').value.trim();
+      const custEmail = document.getElementById('custEmail').value.trim();
+      const division = document.getElementById('custDivision').value;
+      const district = document.getElementById('custDistrict').value.trim();
+      const upazila = document.getElementById('custUpazila').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const instructions = document.getElementById('custInstructions').value.trim();
+      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+      const subtotal = cart.getSubtotal();
+      let discount = 0;
+      if (appliedCoupon) {
+        discount = appliedCoupon.type === 'percentage' ? Math.round(subtotal * (appliedCoupon.value / 100)) : appliedCoupon.value;
+      }
+      const shipping = (subtotal >= 1500 && division === 'Dhaka') ? 0 : shippingRate;
+      const total = Math.max(0, subtotal - discount) + shipping;
+
+      const orderPayload = {
+        customerName: custName,
+        phone: custPhone,
+        email: custEmail,
+        division: division,
+        district: district,
+        upazila: upazila,
+        address: address,
+        instructions: instructions,
+        paymentMethod: paymentMethod,
+        couponCode: appliedCoupon?.code || null,
+        items: cart.items.map(i => ({
+          product_id: i.id,
+          quantity: i.quantity
+        })),
+        totalAmount: total,
+        shippingFee: shipping,
+        idempotencyKey: 'NUT-IDEM-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8)
+      };
+
+      try {
+        const result = await nutoraDB.createOrder(orderPayload);
+        
+        // Clear cart & session coupon
+        cart.items = [];
+        cart.save();
+        sessionStorage.removeItem('nutora_coupon');
+
+        // Show confirmation view
+        document.getElementById('checkoutMainView').style.display = 'none';
+        document.getElementById('orderSuccessView').style.display = 'block';
+        document.getElementById('successOrderNum').textContent = result.order_number || result.order_id;
+        document.getElementById('successRecipient').textContent = custName;
+        document.getElementById('successPhone').textContent = custPhone;
+        document.getElementById('successTotal').textContent = `৳${total}`;
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        console.error('Order creation error:', err);
+        alert('Could not place order: ' + (err.message || 'Please check your inputs and try again.'));
+        btn.disabled = false;
+        btn.textContent = 'Confirm & Place Order';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Pre-fill user details if logged in
+      if (nutoraAuth.currentUser) {
+        if (document.getElementById('custName')) document.getElementById('custName').value = nutoraAuth.currentUser.fullName || '';
+        if (document.getElementById('custPhone')) document.getElementById('custPhone').value = nutoraAuth.currentUser.phone || '';
+        if (document.getElementById('custEmail')) document.getElementById('custEmail').value = nutoraAuth.currentUser.email || '';
+      }
+      renderCheckoutSummary();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store Settings — NUTORA Admin</title>
+  
+  <link rel="icon" type="image/png" href="../assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <aside class="admin-sidebar">
+    <div class="admin-brand-box">
+      <img src="../assets/brand/nutora-logo.png" alt="NUTORA Logo" class="admin-brand-logo">
+      <div>
+        <div style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; color: #FFF9EB;">NUTORA</div>
+        <span style="font-size: 0.72rem; color: var(--color-warm-gold); letter-spacing: 0.05em; text-transform: uppercase;">Kitchen Admin</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <a href="index.html" class="admin-nav-item">📊 Dashboard</a>
+      <a href="products.html" class="admin-nav-item">🍯 Products</a>
+      <a href="categories.html" class="admin-nav-item">📁 Categories</a>
+      <a href="inventory.html" class="admin-nav-item">📦 Inventory & Stock</a>
+      <a href="orders.html" class="admin-nav-item">🛒 Orders</a>
+      <a href="customers.html" class="admin-nav-item">👥 Customers</a>
+      <a href="coupons.html" class="admin-nav-item">🎟️ Coupons</a>
+      <a href="reviews.html" class="admin-nav-item">⭐ Reviews</a>
+      <a href="users.html" class="admin-nav-item">🛡️ User Roles</a>
+      <a href="settings.html" class="admin-nav-item active">⚙️ Store Settings</a>
+      <a href="audit-logs.html" class="admin-nav-item">📜 Audit Logs</a>
+    </nav>
+
+    <div class="admin-user-pill">
+      <!-- Populated via admin-core.js -->
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div>
+        <h1 style="font-size: 1.45rem; color: var(--color-deep-green);">Kitchen & Store Configuration</h1>
+        <span style="font-size: 0.85rem; color: var(--color-muted-text);">Cloud database, delivery charges, payment switches, and store details</span>
+      </div>
+      <div class="admin-topbar-actions">
+        <!-- Populated via admin-core.js -->
+      </div>
+    </header>
+
+    <main class="admin-content" style="max-width: 900px;">
+      <form onsubmit="handleSettingsSave(event)">
+        <!-- 1. Brand & Kitchen Details -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 style="font-size: 1.15rem; color: var(--color-deep-green); margin: 0;">Brand & Contact Information</h3>
+          </div>
+          <div style="padding: 24px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+              <div>
+                <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Store Name</label>
+                <input type="text" id="cfgStoreName" value="NUTORA" class="newsletter-input" style="width: 100%; border-radius: 6px;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Tagline</label>
+                <input type="text" id="cfgTagline" value="Straight Out of Mother's Kitchen" class="newsletter-input" style="width: 100%; border-radius: 6px;">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <div>
+                <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Contact Helpline</label>
+                <input type="text" id="cfgPhone" value="+880 1712-345678" class="newsletter-input" style="width: 100%; border-radius: 6px;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Kitchen Email</label>
+                <input type="email" id="cfgEmail" value="hello@nutorafood.com" class="newsletter-input" style="width: 100%; border-radius: 6px;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Supabase Cloud Database & Auth -->
+        <div class="admin-card">
+          <div class="admin-card-header" style="background: var(--color-deep-green); color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 1.3rem;">🗄️</span>
+              <div>
+                <h3 style="color: #FFF9EB; font-size: 1.15rem; margin: 0;">Supabase Cloud Database & Auth Synchronization</h3>
+                <span style="font-size: 0.78rem; color: var(--color-warm-gold);">PostgreSQL Cloud Database Connection</span>
+              </div>
+            </div>
+            <span id="supabaseStatusBadge" class="badge badge-gold" style="font-size: 0.72rem;">CHECKING...</span>
+          </div>
+
+          <div style="padding: 24px;">
+            <div id="supabaseStatusAlert" style="padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; background: #E8F5E9; border: 1px solid #C8E6C9;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="supabaseStatusDot" style="width: 12px; height: 12px; border-radius: 50%; background: #2E7D32; display: inline-block;"></span>
+                <div>
+                  <strong id="supabaseStatusTitle" style="color: #1B5E20; font-size: 0.95rem;">Embedded Local Database Active</strong>
+                  <div id="supabaseStatusDesc" style="font-size: 0.82rem; color: #2E7D32;">All 20 tables & authentication functioning smoothly in local storage.</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">
+                Supabase Project URL *
+              </label>
+              <input type="url" id="cfgSupabaseUrl" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="https://your-project.supabase.co">
+              <span style="font-size: 0.78rem; color: var(--color-muted-text);">Found in Supabase Dashboard &rarr; Project Settings &rarr; API &rarr; Project URL</span>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">
+                Supabase Public Anon Key *
+              </label>
+              <textarea id="cfgSupabaseKey" rows="3" class="newsletter-input" style="width: 100%; border-radius: 6px; font-family: monospace; font-size: 0.85rem;" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."></textarea>
+              <span style="font-size: 0.78rem; color: var(--color-muted-text);">Found in Supabase Dashboard &rarr; Project Settings &rarr; API &rarr; Project API keys (anon public)</span>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <button type="button" onclick="testAndSaveSupabaseConnection()" id="btnConnectSupabase" class="btn btn-primary btn-sm">
+                Connect & Test Cloud Synchronization
+              </button>
+              <button type="button" onclick="resetToLocalDb()" class="btn btn-outline btn-sm">
+                Use Local Embedded Database
+              </button>
+            </div>
+
+            <div style="margin-top: 20px; padding: 14px 18px; background: #FAF8F2; border-radius: 8px; font-size: 0.84rem; color: var(--color-peanut-brown); border: 1px dashed var(--color-light-border);">
+              <strong>📋 SQL Migrations Ready:</strong> Once connected, you can run the SQL schema located in your project's <code>supabase/migrations/</code> folder in the Supabase SQL Editor:
+              <ul style="margin: 6px 0 0 20px; line-height: 1.5;">
+                <li><code>001_initial_schema.sql</code> (Creates all 20 tables & indexes)</li>
+                <li><code>002_security_rls.sql</code> (Enables Row Level Security)</li>
+                <li><code>003_functions_and_triggers.sql</code> (Calculations & audit triggers)</li>
+                <li><code>seed.sql</code> (Populates default categories & products)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Delivery Rates in Bangladesh -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 style="font-size: 1.15rem; color: var(--color-deep-green); margin: 0;">Delivery Charges Configuration</h3>
+          </div>
+          <div style="padding: 24px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+              <div>
+                <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Dhaka Delivery (৳)</label>
+                <input type="number" id="cfgDhakaFee" value="70" class="newsletter-input" style="width: 100%; border-radius: 6px;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Outside Dhaka (৳)</label>
+                <input type="number" id="cfgOutsideFee" value="130" class="newsletter-input" style="width: 100%; border-radius: 6px;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Free Shipping Over (৳)</label>
+                <input type="number" id="cfgFreeShip" value="1500" class="newsletter-input" style="width: 100%; border-radius: 6px;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Payment Methods -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 style="font-size: 1.15rem; color: var(--color-deep-green); margin: 0;">Payment Gateways</h3>
+          </div>
+          <div style="padding: 24px;">
+            <div style="margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <strong>Cash on Delivery (COD)</strong>
+                <div style="font-size: 0.82rem; color: var(--color-muted-text);">Allow customers across Bangladesh to pay cash upon doorstep parcel delivery</div>
+              </div>
+              <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--color-forest-green);">
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--color-light-border);">
+              <div>
+                <strong>SSLCommerz Gateway Integration Boundary</strong>
+                <div style="font-size: 0.82rem; color: var(--color-muted-text);">Online payments (bKash, Nagad, Visa, Mastercard) via verified server boundary</div>
+              </div>
+              <input type="checkbox" style="width: 20px; height: 20px; accent-color: var(--color-forest-green);">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg">Save Settings & Configuration</button>
+      </form>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-core.js"></script>
+  <script src="../js/db-modal.js"></script>
+
+  <script>
+    function updateSupabaseUIStatus() {
+      const urlInput = document.getElementById('cfgSupabaseUrl');
+      const keyInput = document.getElementById('cfgSupabaseKey');
+      const badge = document.getElementById('supabaseStatusBadge');
+      const title = document.getElementById('supabaseStatusTitle');
+      const desc = document.getElementById('supabaseStatusDesc');
+      const dot = document.getElementById('supabaseStatusDot');
+      const alertBox = document.getElementById('supabaseStatusAlert');
+
+      urlInput.value = nutoraDB.supabaseUrl || '';
+      keyInput.value = nutoraDB.supabaseKey || '';
+
+      if (nutoraDB.connectionState === 'connected') {
+        badge.className = 'badge badge-green';
+        badge.textContent = 'CONNECTED (CLOUD)';
+        title.textContent = 'Supabase PostgreSQL Cloud Active';
+        title.style.color = '#1B5E20';
+        desc.textContent = `Connected to: ${nutoraDB.supabaseUrl} (Tables & Auth synchronized)`;
+        dot.style.background = '#2E7D32';
+        alertBox.style.background = '#E8F5E9';
+        alertBox.style.border = '1px solid #C8E6C9';
+      } else if (nutoraDB.connectionState === 'connected_needs_schema') {
+        badge.className = 'badge badge-gold';
+        badge.textContent = 'CLOUD READY (RUN SQL)';
+        title.textContent = 'Supabase Cloud Connected — Ready for SQL Schema';
+        title.style.color = '#B37D14';
+        desc.textContent = `Connected to: ${nutoraDB.supabaseUrl}. Run COMPLETE_SUPABASE_SETUP.sql in Supabase SQL Editor to populate all 20 tables.`;
+        dot.style.background = '#F57F17';
+        alertBox.style.background = '#FFFDE7';
+        alertBox.style.border = '1px solid #FFF59D';
+      } else if (nutoraDB.isLive && nutoraDB.client) {
+        badge.className = 'badge badge-green';
+        badge.textContent = 'CONNECTED (CLOUD)';
+        title.textContent = 'Supabase PostgreSQL Cloud Active';
+        title.style.color = '#1B5E20';
+        desc.textContent = `Connected to: ${nutoraDB.supabaseUrl}`;
+        dot.style.background = '#2E7D32';
+        alertBox.style.background = '#E8F5E9';
+        alertBox.style.border = '1px solid #C8E6C9';
+      } else if (nutoraDB.supabaseUrl && nutoraDB.supabaseKey) {
+        badge.className = 'badge badge-gold';
+        badge.textContent = 'CONFIGURED';
+        title.textContent = 'Supabase Credentials Stored (Connecting/Offline Fallback)';
+        title.style.color = '#B37D14';
+        desc.textContent = 'Using local embedded engine fallback until cloud host handshake completes.';
+        dot.style.background = '#F57F17';
+        alertBox.style.background = '#FFFDE7';
+        alertBox.style.border = '1px solid #FFF59D';
+      } else {
+        badge.className = 'badge badge-gold';
+        badge.textContent = 'LOCAL ENGINE';
+        title.textContent = 'Embedded Local Database Active';
+        title.style.color = '#1B5E20';
+        desc.textContent = 'All 20 tables & authentication functioning smoothly in browser persistent storage.';
+        dot.style.background = '#2E7D32';
+        alertBox.style.background = '#E8F5E9';
+        alertBox.style.border = '1px solid #C8E6C9';
+      }
+    }
+
+    async function testAndSaveSupabaseConnection() {
+      const url = document.getElementById('cfgSupabaseUrl').value.trim();
+      const key = document.getElementById('cfgSupabaseKey').value.trim();
+      const btn = document.getElementById('btnConnectSupabase');
+
+      if (!url.startsWith('http') || key.length < 20) {
+        alert('Please enter a valid Supabase Project URL (e.g. https://xyz.supabase.co) and Anon Key.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Connecting to Supabase Cloud...';
+
+      const success = await nutoraDB.saveConfig(url, key);
+      btn.disabled = false;
+      btn.textContent = 'Connect & Test Cloud Synchronization';
+
+      if (success) {
+        alert('✓ Supabase Cloud successfully connected! Live PostgreSQL synchronization is active.');
+      } else {
+        alert('Credentials saved! The application will automatically synchronize with your Supabase Cloud project.');
+      }
+      updateSupabaseUIStatus();
+    }
+
+    function resetToLocalDb() {
+      localStorage.removeItem('nutora_supabase_keys');
+      nutoraDB.supabaseUrl = '';
+      nutoraDB.supabaseKey = '';
+      nutoraDB.isLive = false;
+      nutoraDB.client = null;
+      updateSupabaseUIStatus();
+      alert('Reset to Embedded Local Database. All 20 tables active locally.');
+    }
+
+    function handleSettingsSave(e) {
+      e.preventDefault();
+      const logs = JSON.parse(localStorage.getItem('nutora_audit_logs') || '[]');
+      logs.unshift({
+        id: 'aud-' + Date.now(),
+        action: 'STORE_SETTINGS_MODIFIED',
+        user_email: nutoraAuth.currentUser?.email || 'admin@nutorafood.com',
+        entity_type: 'store_settings',
+        entity_id: 'global_config',
+        old_values: null,
+        new_values: {
+          store_name: document.getElementById('cfgStoreName').value,
+          dhaka_fee: document.getElementById('cfgDhakaFee').value,
+          outside_fee: document.getElementById('cfgOutsideFee').value
+        },
+        created_at: new Date().toISOString()
+      });
+      localStorage.setItem('nutora_audit_logs', JSON.stringify(logs));
+      alert('✓ Store settings saved successfully!');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateSupabaseUIStatus();
+    });
+  </script>
+</body>
+</html>

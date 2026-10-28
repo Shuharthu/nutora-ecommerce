@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop Natural & Homemade Pantry — NUTORA</title>
+  
+  <meta name="description" content="Explore NUTORA's handcrafted catalog: pure Sundarban raw honey, artisanal peanut butter, traditional bilona cow ghee, Bogra mishti doi, and homemade pickles.">
+  <link rel="icon" type="image/png" href="assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/storefront.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .shop-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 36px;
+      padding: 48px 0 80px;
+    }
+
+    .shop-sidebar {
+      background: var(--color-warm-white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-light-border);
+      padding: 24px;
+      height: fit-content;
+      position: sticky;
+      top: 104px;
+    }
+
+    .sidebar-widget {
+      margin-bottom: 28px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--color-light-border);
+    }
+
+    .sidebar-widget:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .widget-title {
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+      color: var(--color-deep-green);
+    }
+
+    .filter-list li {
+      margin-bottom: 8px;
+    }
+
+    .filter-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--color-body-text);
+      font-size: 0.92rem;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .filter-link:hover, .filter-link.active {
+      background: #FFF5DD;
+      color: var(--color-forest-green);
+      font-weight: 700;
+    }
+
+    .shop-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--color-warm-white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-light-border);
+      padding: 14px 20px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .shop-search-box {
+      display: flex;
+      align-items: center;
+      background: var(--color-cream);
+      border: 1px solid var(--color-light-border);
+      border-radius: var(--radius-pill);
+      padding: 8px 16px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .shop-search-input {
+      flex-grow: 1;
+      font-size: 0.88rem;
+    }
+
+    .shop-sort-select {
+      background: var(--color-cream);
+      border: 1px solid var(--color-light-border);
+      border-radius: var(--radius-pill);
+      padding: 8px 16px;
+      font-size: 0.88rem;
+      color: var(--color-deep-green);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .shop-layout {
+        grid-template-columns: 1fr;
+      }
+      .shop-sidebar {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <aside class="announcement-bar">
+    <div class="container announcement-content">
+      <span>🌿 <strong>Fresh Kitchen Batches Ready:</strong> Cash on Delivery across Bangladesh!</span>
+      <a href="shop.html" class="announcement-link">Shop All Kitchen Batches &rarr;</a>
+    </div>
+  </aside>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link" aria-label="NUTORA Homepage">
+        <img src="assets/brand/nutora-logo.png" alt="NUTORA Logo" class="brand-emblem" width="62" height="62">
+        <div class="brand-typography">
+          <span class="brand-name">NUTORA</span>
+          <span class="brand-tagline">Straight Out of Mother's Kitchen</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link active">Shop</a>
+        <a href="index.html#categories" class="nav-link">Categories</a>
+        <a href="about.html" class="nav-link">Our Story</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="account.html" class="btn-icon" title="Customer Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </a>
+        <button id="cartBtn" class="btn-icon cart-btn" aria-label="View basket">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span id="cartCount" class="cart-count">0</span>
+        </button>
+        <a href="checkout.html" class="btn btn-primary btn-sm">Checkout</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Shop Header Banner -->
+  <section style="background: #FAF4E5; padding: 40px 0; border-bottom: 1px solid var(--color-light-border);">
+    <div class="container" style="text-align: center;">
+      <span class="section-tag">Pure & Authentic</span>
+      <h1 style="font-size: 2.4rem; margin-bottom: 8px;">Pantry Storefront</h1>
+      <p style="color: var(--color-muted-text); max-width: 600px; margin: 0 auto;">
+        Browse small-batch homemade pantry staples made from fresh natural ingredients, traditional methods, and uncompromised maternal hygiene.
+      </p>
+    </div>
+  </section>
+
+  <!-- Shop Main Container -->
+  <main class="container shop-layout">
+    <!-- Sidebar Filters -->
+    <aside class="shop-sidebar">
+      <div class="sidebar-widget">
+        <h3 class="widget-title">Categories</h3>
+        <ul class="filter-list">
+          <li><span class="filter-link active" onclick="applyCategoryFilter('all', this)">All Kitchen Batches <span style="color: var(--color-muted-text);">(8)</span></span></li>
+          <li><span class="filter-link" onclick="applyCategoryFilter('organic-honey', this)">Organic Honey <span style="color: var(--color-muted-text);">(1)</span></span></li>
+          <li><span class="filter-link" onclick="applyCategoryFilter('homemade-peanut-butter', this)">Homemade Peanut Butter <span style="color: var(--color-muted-text);">(1)</span></span></li>
+          <li><span class="filter-link" onclick="applyCategoryFilter('pure-ghee', this)">Pure Ghee <span style="color: var(--color-muted-text);">(1)</span></span></li>
+          <li><span class="filter-link" onclick="applyCategoryFilter('mishti-doi', this)">Mishti Doi <span style="color: var(--color-muted-text);">(1)</span></span></li>
+          <li><span class="filter-link" onclick="applyCategoryFilter('traditional-homemade-foods', this)">Homemade Foods & Achars <span style="color: var(--color-muted-text);">(1)</span></span></li>
+          <li><span class="filter-link" onclick="applyCategoryFilter('natural-pantry', this)">Natural Pantry <span style="color: var(--color-muted-text);">(2)</span></span></li>
+          <li><span class="filter-link" onclick="applyCategoryFilter('gift-boxes', this)">Gift Boxes <span style="color: var(--color-muted-text);">(1)</span></span></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-widget">
+        <h3 class="widget-title">Price Range</h3>
+        <input type="range" id="priceRange" min="150" max="3000" step="50" value="3000" style="width: 100%; accent-color: var(--color-forest-green);" oninput="updatePriceFilter(this.value)">
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 8px; color: var(--color-deep-green); font-weight: 700;">
+          <span>৳150</span>
+          <span id="priceDisplay">Up to ৳3,000</span>
+        </div>
+      </div>
+
+      <div class="sidebar-widget">
+        <h3 class="widget-title">Purity Guarantee</h3>
+        <p style="font-size: 0.84rem; color: var(--color-muted-text); line-height: 1.5;">
+          ✓ 100% Homemade<br>
+          ✓ Zero Chemical Preservatives<br>
+          ✓ Natural Forest Raw Honey<br>
+          ✓ Stone-ground Peanuts
+        </p>
+      </div>
+    </aside>
+
+    <!-- Products Content -->
+    <section>
+      <!-- Shop Toolbar -->
+      <div class="shop-toolbar">
+        <div class="shop-search-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px; color: var(--color-muted-text);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="shopSearch" class="shop-search-input" placeholder="Search honey, ghee, peanut butter..." oninput="handleSearch(this.value)">
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span id="productCountText" style="font-size: 0.88rem; color: var(--color-muted-text);">Showing 8 items</span>
+          <select id="sortSelect" class="shop-sort-select" onchange="handleSort(this.value)">
+            <option value="featured">Featured Batches</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="shopProductsGrid" class="products-grid">
+        <!-- Rendered reactively via JS -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Interactive Cart Drawer -->
+  <div id="cartDrawerOverlay" class="cart-drawer-overlay"></div>
+  <aside id="cartDrawer" class="cart-drawer" role="dialog" aria-modal="true">
+    <div class="cart-drawer-header">
+      <h3 class="cart-drawer-title">Your Kitchen Basket</h3>
+      <button id="closeCartDrawer" class="cart-drawer-close">&times;</button>
+    </div>
+    <div id="cartDrawerItems" class="cart-drawer-body"></div>
+    <div class="cart-drawer-footer">
+      <div class="cart-drawer-subtotal">
+        <span>Subtotal:</span>
+        <span id="cartDrawerSubtotal" style="color: var(--color-forest-green);">৳0</span>
+      </div>
+      <a href="checkout.html" class="btn btn-primary" style="width: 100%;">Proceed to Checkout</a>
+    </div>
+  </aside>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 NUTORA Homemade Foods. All rights reserved. Made with love in Bangladesh.</div>
+      <div style="display: flex; gap: 20px;">
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="shipping-policy.html">Shipping</a>
+        <a href="refund-policy.html">Refunds</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    let currentCategory = 'all';
+    let currentSearch = '';
+    let currentMaxPrice = 3000;
+    let currentSort = 'featured';
+
+    async function loadShopProducts() {
+      const grid = document.getElementById('shopProductsGrid');
+      if (!grid) return;
+
+      const products = await nutoraDB.getProducts({
+        categorySlug: currentCategory,
+        search: currentSearch,
+        maxPrice: currentMaxPrice,
+        sortBy: currentSort
+      });
+
+      const countEl = document.getElementById('productCountText');
+      if (countEl) countEl.textContent = `Showing ${products.length} items`;
+
+      if (products.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: white; border-radius: 12px; border: 1px solid var(--color-light-border);">
+            <div style="font-size: 2.8rem; margin-bottom: 12px;">🍃</div>
+            <h3 style="color: var(--color-deep-green); margin-bottom: 8px;">No matching kitchen batches</h3>
+            <p style="color: var(--color-muted-text); margin-bottom: 20px;">Try adjusting your search or filters.</p>
+            <button onclick="resetFilters()" class="btn btn-secondary btn-sm">Reset All Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = products.map(p => `
+        <article class="product-card">
+          <div class="product-media-wrapper">
+            <div class="product-badge-group">
+              ${p.badge ? `<span class="product-sale-pill">${p.badge}</span>` : ''}
+              <span class="product-origin-pill">Fresh Batch</span>
+            </div>
+            <a href="product.html?id=${p.id || p.slug}">
+              <img src="${p.image}" alt="${p.name}" class="product-card-img" loading="lazy" />
+            </a>
+          </div>
+          <div class="product-card-body">
+            <span class="product-category-name">${p.category}</span>
+            <h3 class="product-title">
+              <a href="product.html?id=${p.id || p.slug}">${p.name}</a>
+            </h3>
+            <p class="product-weight">${p.weight}</p>
+            <div class="product-rating">
+              <span class="stars">★★★★★</span>
+              <span class="review-count">(${p.reviewCount || 24} reviews)</span>
+            </div>
+            <div class="product-card-footer">
+              <div class="price-box">
+                <span class="price-current">৳${p.price}</span>
+                ${p.originalPrice ? `<span class="price-original">৳${p.originalPrice}</span>` : ''}
+              </div>
+              <button class="btn-add-cart" onclick="handleAddToCart('${p.id}')">
+                Add to Basket
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function applyCategoryFilter(cat, el) {
+      document.querySelectorAll('.filter-link').forEach(link => link.classList.remove('active'));
+      el.classList.add('active');
+      currentCategory = cat;
+      loadShopProducts();
+    }
+
+    function updatePriceFilter(val) {
+      currentMaxPrice = parseInt(val, 10);
+      document.getElementById('priceDisplay').textContent = `Up to ৳${currentMaxPrice.toLocaleString()}`;
+      loadShopProducts();
+    }
+
+    function handleSearch(val) {
+      currentSearch = val;
+      loadShopProducts();
+    }
+
+    function handleSort(val) {
+      currentSort = val;
+      loadShopProducts();
+    }
+
+    function resetFilters() {
+      currentCategory = 'all';
+      currentSearch = '';
+      currentMaxPrice = 3000;
+      currentSort = 'featured';
+      document.getElementById('shopSearch').value = '';
+      document.getElementById('priceRange').value = 3000;
+      document.getElementById('priceDisplay').textContent = 'Up to ৳3,000';
+      document.querySelectorAll('.filter-link').forEach(link => link.classList.remove('active'));
+      document.querySelector('.filter-link')?.classList.add('active');
+      loadShopProducts();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check URL search params for category
+      const urlParams = new URLSearchParams(window.location.search);
+      const catParam = urlParams.get('category');
+      if (catParam) {
+        currentCategory = catParam;
+      }
+      loadShopProducts();
+    });
+  </script>
+</body>
+</html>

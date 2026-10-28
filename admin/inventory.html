@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory & Stock Management — NUTORA Admin</title>
+  
+  <link rel="icon" type="image/png" href="../assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <aside class="admin-sidebar">
+    <div class="admin-brand-box">
+      <img src="../assets/brand/nutora-logo.png" alt="NUTORA Logo" class="admin-brand-logo">
+      <div>
+        <div style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; color: #FFF9EB;">NUTORA</div>
+        <span style="font-size: 0.72rem; color: var(--color-warm-gold); letter-spacing: 0.05em; text-transform: uppercase;">Kitchen Admin</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <a href="index.html" class="admin-nav-item">📊 Dashboard</a>
+      <a href="products.html" class="admin-nav-item">🍯 Products</a>
+      <a href="categories.html" class="admin-nav-item">📁 Categories</a>
+      <a href="inventory.html" class="admin-nav-item active">📦 Inventory & Stock</a>
+      <a href="orders.html" class="admin-nav-item">🛒 Orders</a>
+      <a href="customers.html" class="admin-nav-item">👥 Customers</a>
+      <a href="coupons.html" class="admin-nav-item">🎟️ Coupons</a>
+      <a href="reviews.html" class="admin-nav-item">⭐ Reviews</a>
+      <a href="users.html" class="admin-nav-item">🛡️ User Roles</a>
+      <a href="settings.html" class="admin-nav-item">⚙️ Store Settings</a>
+      <a href="audit-logs.html" class="admin-nav-item">📜 Audit Logs</a>
+    </nav>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div>
+        <h1 style="font-size: 1.45rem; color: var(--color-deep-green);">Kitchen Inventory & Stock Levels</h1>
+        <span style="font-size: 0.85rem; color: var(--color-muted-text);">Monitor weekly small-batch production and adjust units in stock</span>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <input type="text" id="invSearchInput" placeholder="Search by batch name or SKU..." class="newsletter-input" style="max-width: 320px; padding: 8px 16px; font-size: 0.88rem;" oninput="filterInventory(this.value)">
+          <div style="display: flex; gap: 10px;">
+            <button onclick="filterLowStockOnly()" class="btn btn-outline btn-sm">Show Low Stock Only (< 30)</button>
+            <button onclick="loadInventory()" class="btn btn-secondary btn-sm">Reset</button>
+          </div>
+        </div>
+
+        <div class="admin-table-container">
+          <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Product / Batch</th>
+              <th>SKU</th>
+              <th>Category</th>
+              <th>Current Stock</th>
+              <th>Quick Adjust (+ / -)</th>
+              <th>Stock Status</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-core.js"></script>
+  <script src="../js/db-modal.js"></script>
+
+  <script>
+    let invProducts = [];
+
+    async function loadInventory() {
+      const stored = localStorage.getItem('nutora_catalog_override');
+      if (stored) {
+        invProducts = JSON.parse(stored);
+      } else {
+        invProducts = typeof DEMO_PRODUCTS !== 'undefined' ? [...DEMO_PRODUCTS] : [];
+      }
+      renderInventory(invProducts);
+    }
+
+    function renderInventory(list) {
+      const tbody = document.getElementById('inventoryBody');
+      tbody.innerHTML = list.map(p => {
+        const qty = p.stock_quantity !== undefined ? p.stock_quantity : 45;
+        const isLow = qty < 30;
+        const isOut = qty === 0;
+
+        return `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="../${p.image}" alt="" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
+                <div>
+                  <strong>${p.name}</strong>
+                  <div style="font-size: 0.8rem; color: var(--color-muted-text);">${p.weight}</div>
+                </div>
+              </div>
+            </td>
+            <td style="font-family: monospace; font-size: 0.84rem;">${(p.id || 'NUT').toUpperCase()}</td>
+            <td>${p.category}</td>
+            <td>
+              <span id="stockDisplay-${p.id}" style="font-size: 1.15rem; font-weight: 800; color: ${isOut ? 'var(--color-danger)' : isLow ? 'var(--color-warning)' : 'var(--color-forest-green)'};">
+                ${qty} jars
+              </span>
+            </td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <button onclick="adjustStock('${p.id}', -5)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">-5</button>
+                <button onclick="adjustStock('${p.id}', -1)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">-1</button>
+                <button onclick="adjustStock('${p.id}', 1)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">+1</button>
+                <button onclick="adjustStock('${p.id}', 10)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">+10</button>
+              </div>
+            </td>
+            <td>
+              ${isOut ? '<span class="badge" style="background: #F8D7DA; color: #721C24;">Out of Stock</span>' :
+                isLow ? '<span class="badge badge-gold">Low Stock</span>' :
+                '<span class="badge badge-green">Healthy Batch</span>'}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function adjustStock(prodId, delta) {
+      const p = invProducts.find(item => item.id === prodId);
+      if (!p) return;
+
+      const current = p.stock_quantity !== undefined ? p.stock_quantity : 45;
+      p.stock_quantity = Math.max(0, current + delta);
+      localStorage.setItem('nutora_catalog_override', JSON.stringify(invProducts));
+      renderInventory(invProducts);
+    }
+
+    function filterInventory(query) {
+      const q = query.toLowerCase();
+      renderInventory(invProducts.filter(p => p.name.toLowerCase().includes(q) || (p.id && p.id.toLowerCase().includes(q))));
+    }
+
+    function filterLowStockOnly() {
+      renderInventory(invProducts.filter(p => (p.stock_quantity || 45) < 30));
+    }
+
+    document.addEventListener('DOMContentLoaded', loadInventory);
+  </script>
+</body>
+</html>

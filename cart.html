@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Kitchen Basket — NUTORA</title>
+  
+  <link rel="icon" type="image/png" href="assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/storefront.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .cart-page-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 40px;
+      padding: 56px 0 80px;
+    }
+
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--color-light-border);
+    }
+
+    .cart-table th {
+      background: var(--color-cream);
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--color-deep-green);
+      border-bottom: 1px solid var(--color-light-border);
+    }
+
+    .cart-table td {
+      padding: 20px;
+      border-bottom: 1px solid var(--color-light-border);
+      vertical-align: middle;
+    }
+
+    .summary-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-light-border);
+      padding: 28px;
+      height: fit-content;
+      position: sticky;
+      top: 104px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      font-size: 0.96rem;
+      color: var(--color-body-text);
+    }
+
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 18px;
+      margin-top: 18px;
+      border-top: 2px dashed var(--color-light-border);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--color-forest-green);
+    }
+
+    .coupon-box {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .coupon-input {
+      flex-grow: 1;
+      padding: 10px 14px;
+      border: 1.5px solid var(--color-light-border);
+      border-radius: var(--radius-pill);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      .cart-page-layout {
+        grid-template-columns: 1fr;
+      }
+      .summary-card {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link" aria-label="NUTORA Homepage">
+        <img src="assets/brand/nutora-logo.png" alt="NUTORA Logo" class="brand-emblem" width="62" height="62">
+        <div class="brand-typography">
+          <span class="brand-name">NUTORA</span>
+          <span class="brand-tagline">Straight Out of Mother's Kitchen</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="about.html" class="nav-link">Our Story</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="account.html" class="btn-icon" title="Customer Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </a>
+        <a href="shop.html" class="btn btn-outline btn-sm">Continue Shopping</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Cart Container -->
+  <main class="container cart-page-layout">
+    <!-- Left: Cart Items Table -->
+    <div>
+      <h1 style="font-size: 2.2rem; margin-bottom: 24px; color: var(--color-deep-green);">Your Kitchen Basket</h1>
+      
+      <div id="cartTableWrapper">
+        <!-- Rendered reactively via JS -->
+      </div>
+    </div>
+
+    <!-- Right: Order Summary -->
+    <aside class="summary-card">
+      <h3 style="font-size: 1.3rem; margin-bottom: 20px; color: var(--color-deep-green);">Order Summary</h3>
+
+      <div class="summary-row">
+        <span>Basket Subtotal</span>
+        <strong id="cartSubtotalText">৳0</strong>
+      </div>
+
+      <div class="summary-row" id="couponRow" style="display: none; color: var(--color-forest-green);">
+        <span>Promotional Discount</span>
+        <strong id="couponDiscountText">-৳0</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Estimated Delivery</span>
+        <span id="shippingEstText" style="color: var(--color-muted-text);">৳70 (Dhaka)</span>
+      </div>
+
+      <!-- Coupon input -->
+      <div class="coupon-box">
+        <input type="text" id="couponCodeInput" class="coupon-input" placeholder="Coupon Code (e.g. MOMSLOVE10)">
+        <button onclick="applyCoupon()" class="btn btn-secondary btn-sm">Apply</button>
+      </div>
+      <div id="couponStatusMsg" style="font-size: 0.82rem; margin-top: -12px; margin-bottom: 14px;"></div>
+
+      <div class="summary-total">
+        <span>Total Payable:</span>
+        <span id="cartTotalText">৳0</span>
+      </div>
+
+      <p style="font-size: 0.8rem; color: var(--color-muted-text); margin: 16px 0;">
+        Tax included. Exact shipping calculated at checkout. Cash on Delivery available all over Bangladesh.
+      </p>
+
+      <a href="checkout.html" class="btn btn-primary btn-lg" style="width: 100%;">
+        Proceed to Checkout &rarr;
+      </a>
+    </aside>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 NUTORA Homemade Foods. All rights reserved. Made with love in Bangladesh.</div>
+      <div style="display: flex; gap: 20px;">
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="shipping-policy.html">Shipping</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    let activeCoupon = null;
+
+    function renderCartTable() {
+      const wrapper = document.getElementById('cartTableWrapper');
+      if (!wrapper) return;
+
+      if (cart.items.length === 0) {
+        wrapper.innerHTML = `
+          <div style="background: white; border-radius: 16px; border: 1px solid var(--color-light-border); padding: 60px 24px; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 12px; color: var(--color-honey-gold);">🧺</div>
+            <h3 style="color: var(--color-deep-green); margin-bottom: 8px;">Your kitchen basket is empty</h3>
+            <p style="color: var(--color-muted-text); margin-bottom: 24px;">Explore our handcrafted honeys, nut butters, and pure bilona ghee.</p>
+            <a href="shop.html" class="btn btn-primary">Browse Pantry Store</a>
+          </div>
+        `;
+        updateSummary(0);
+        return;
+      }
+
+      const rows = cart.items.map(item => `
+        <tr>
+          <td>
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <img src="${item.image}" alt="${item.name}" style="width: 72px; height: 72px; border-radius: 8px; object-fit: cover; background: #FFF9EB;">
+              <div>
+                <a href="product.html?id=${item.id}" style="font-weight: 700; color: var(--color-deep-green); font-size: 1rem; display: block; margin-bottom: 4px;">${item.name}</a>
+                <span style="font-size: 0.84rem; color: var(--color-muted-text);">${item.weight}</span>
+              </div>
+            </div>
+          </td>
+          <td style="font-weight: 600; color: var(--color-forest-green); font-size: 1rem;">৳${item.price}</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button onclick="cart.updateQuantity('${item.id}', -1)" style="width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--color-light-border); background: white; font-weight: bold; cursor: pointer;">-</button>
+              <span style="font-weight: 700; min-width: 24px; text-align: center;">${item.quantity}</span>
+              <button onclick="cart.updateQuantity('${item.id}', 1)" style="width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--color-light-border); background: white; font-weight: bold; cursor: pointer;">+</button>
+            </div>
+          </td>
+          <td style="font-weight: 800; color: var(--color-forest-green); font-size: 1.1rem;">৳${item.price * item.quantity}</td>
+          <td style="text-align: right;">
+            <button onclick="cart.removeItem('${item.id}')" style="color: #C0392B; font-size: 0.84rem; cursor: pointer; text-decoration: underline;">Remove</button>
+          </td>
+        </tr>
+      `).join('');
+
+      wrapper.innerHTML = `
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      `;
+
+      updateSummary(cart.getSubtotal());
+    }
+
+    function updateSummary(subtotal) {
+      let discount = 0;
+      if (activeCoupon) {
+        if (activeCoupon.type === 'percentage') {
+          discount = Math.round(subtotal * (activeCoupon.value / 100));
+        } else {
+          discount = activeCoupon.value;
+        }
+      }
+
+      const shipping = subtotal >= 1500 ? 0 : 70;
+      const total = Math.max(0, subtotal - discount) + (subtotal > 0 ? shipping : 0);
+
+      document.getElementById('cartSubtotalText').textContent = `৳${subtotal}`;
+      
+      const couponRow = document.getElementById('couponRow');
+      if (discount > 0) {
+        couponRow.style.display = 'flex';
+        document.getElementById('couponDiscountText').textContent = `-৳${discount}`;
+      } else {
+        couponRow.style.display = 'none';
+      }
+
+      document.getElementById('shippingEstText').textContent = shipping === 0 ? 'FREE (Orders over ৳1,500)' : '৳70 (Dhaka)';
+      document.getElementById('cartTotalText').textContent = `৳${total}`;
+    }
+
+    function applyCoupon() {
+      const code = document.getElementById('couponCodeInput').value.trim().toUpperCase();
+      const msg = document.getElementById('couponStatusMsg');
+
+      if (code === 'MOMSLOVE10') {
+        activeCoupon = { code: 'MOMSLOVE10', type: 'percentage', value: 10 };
+        msg.style.color = 'var(--color-success)';
+        msg.textContent = '✓ MOMSLOVE10 applied (10% Off)!';
+        sessionStorage.setItem('nutora_coupon', JSON.stringify(activeCoupon));
+      } else if (code === 'KITCHEN50') {
+        activeCoupon = { code: 'KITCHEN50', type: 'fixed', value: 50 };
+        msg.style.color = 'var(--color-success)';
+        msg.textContent = '✓ KITCHEN50 applied (৳50 Off)!';
+        sessionStorage.setItem('nutora_coupon', JSON.stringify(activeCoupon));
+      } else {
+        msg.style.color = 'var(--color-danger)';
+        msg.textContent = '✗ Invalid coupon code.';
+      }
+      updateSummary(cart.getSubtotal());
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check stored coupon
+      try {
+        const c = sessionStorage.getItem('nutora_coupon');
+        if (c) activeCoupon = JSON.parse(c);
+      } catch (e) {}
+
+      renderCartTable();
+      document.addEventListener('nutora:cart-updated', renderCartTable);
+    });
+  </script>
+</body>
+</html>

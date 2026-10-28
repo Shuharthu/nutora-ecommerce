@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Account — NUTORA</title>
+  
+  <link rel="icon" type="image/png" href="assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/storefront.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .account-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 36px;
+      padding: 56px 0 80px;
+    }
+
+    .account-sidebar {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-light-border);
+      padding: 24px;
+      height: fit-content;
+    }
+
+    .account-nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-deep-green);
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      transition: all var(--transition-fast);
+      margin-bottom: 6px;
+    }
+
+    .account-nav-btn:hover, .account-nav-btn.active {
+      background: #FFF5DD;
+      color: var(--color-forest-green);
+    }
+
+    .order-history-card {
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-light-border);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .order-status-badge {
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .status-pending { background: #FFF3CD; color: #856404; }
+    .status-confirmed { background: #D1ECF1; color: #0C5460; }
+    .status-shipped { background: #CCE5FF; color: #004085; }
+    .status-delivered { background: #D4EDDA; color: #155724; }
+    .status-cancelled { background: #F8D7DA; color: #721C24; }
+
+    @media (max-width: 900px) {
+      .account-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link" aria-label="NUTORA Homepage">
+        <img src="assets/brand/nutora-logo.png" alt="NUTORA Logo" class="brand-emblem" width="62" height="62">
+        <div class="brand-typography">
+          <span class="brand-name">NUTORA</span>
+          <span class="brand-tagline">Straight Out of Mother's Kitchen</span>
+        </div>
+      </a>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="cart.html" class="nav-link">Basket</a>
+      </nav>
+      <div class="nav-actions">
+        <button onclick="handleLogout()" class="btn btn-outline btn-sm">Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container account-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="account-sidebar">
+      <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid var(--color-light-border); margin-bottom: 18px;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: #FFF0CC; color: var(--color-peanut-brown); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800; margin: 0 auto 10px;">
+          <span id="userInitial">U</span>
+        </div>
+        <h3 id="userNameDisplay" style="font-size: 1.15rem; color: var(--color-deep-green); margin-bottom: 2px;">Customer</h3>
+        <span id="userRoleBadge" class="badge badge-gold" style="font-size: 0.72rem;">Customer</span>
+      </div>
+
+      <nav>
+        <button class="account-nav-btn active" onclick="switchAccountView('orders', this)">
+          📦 Order History
+        </button>
+        <button class="account-nav-btn" onclick="switchAccountView('profile', this)">
+          👤 Personal Profile
+        </button>
+        <button class="account-nav-btn" onclick="switchAccountView('addresses', this)">
+          📍 Saved Addresses
+        </button>
+        <div id="adminShortcutWrapper" style="display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--color-light-border);">
+          <a href="admin/index.html" class="btn btn-gold btn-sm" style="width: 100%; display: flex; justify-content: center; gap: 8px;">
+            ⚙️ Admin Dashboard
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <section>
+      <!-- View: Orders -->
+      <div id="viewOrders">
+        <h2 style="font-size: 1.6rem; margin-bottom: 18px; color: var(--color-deep-green);">My Kitchen Orders</h2>
+        <div id="ordersListContainer">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <!-- View: Profile -->
+      <div id="viewProfile" style="display: none;">
+        <h2 style="font-size: 1.6rem; margin-bottom: 18px; color: var(--color-deep-green);">Personal Information</h2>
+        <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--color-light-border); padding: 32px; max-width: 540px;">
+          <form onsubmit="handleProfileUpdate(event)">
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">Full Name</label>
+              <input type="text" id="profName" class="newsletter-input" style="width: 100%; border-radius: var(--radius-md);">
+            </div>
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">Phone</label>
+              <input type="tel" id="profPhone" class="newsletter-input" style="width: 100%; border-radius: var(--radius-md);">
+            </div>
+            <div style="margin-bottom: 24px;">
+              <label style="display: block; font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">Email (Read-only)</label>
+              <input type="email" id="profEmail" readonly class="newsletter-input" style="width: 100%; border-radius: var(--radius-md); background: #FAF5EB;">
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- View: Addresses -->
+      <div id="viewAddresses" style="display: none;">
+        <h2 style="font-size: 1.6rem; margin-bottom: 18px; color: var(--color-deep-green);">Saved Delivery Addresses</h2>
+        <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--color-light-border); padding: 24px; max-width: 540px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <strong style="color: var(--color-deep-green);">Default Delivery Address (Dhaka)</strong>
+            <span class="badge badge-green">Default</span>
+          </div>
+          <p style="color: var(--color-muted-text); font-size: 0.94rem; line-height: 1.6;">
+            House 42, Road 11, Block D<br>
+            Banani, Dhaka - 1213, Bangladesh<br>
+            Phone: +880 1712-345678
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 NUTORA Homemade Foods. All rights reserved.</div>
+      <div style="display: flex; gap: 20px;">
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    function switchAccountView(view, btn) {
+      document.querySelectorAll('.account-nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.getElementById('viewOrders').style.display = view === 'orders' ? 'block' : 'none';
+      document.getElementById('viewProfile').style.display = view === 'profile' ? 'block' : 'none';
+      document.getElementById('viewAddresses').style.display = view === 'addresses' ? 'block' : 'none';
+    }
+
+    function renderUserOrders() {
+      const container = document.getElementById('ordersListContainer');
+      const orders = JSON.parse(localStorage.getItem('nutora_orders') || '[]');
+
+      if (orders.length === 0) {
+        container.innerHTML = `
+          <div style="background: white; border-radius: 12px; border: 1px solid var(--color-light-border); padding: 48px 24px; text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">📦</div>
+            <h3 style="color: var(--color-deep-green); margin-bottom: 6px;">No orders yet</h3>
+            <p style="color: var(--color-muted-text); margin-bottom: 20px;">When you place an order, its real-time preparation & dispatch status will appear here.</p>
+            <a href="shop.html" class="btn btn-primary btn-sm">Explore Kitchen Batches</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orders.map(ord => `
+        <div class="order-history-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <strong style="color: var(--color-deep-green); font-size: 1.05rem;">Order #${ord.order_number || ord.order_id}</strong>
+              <div style="font-size: 0.82rem; color: var(--color-muted-text);">${new Date(ord.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+            </div>
+            <span class="order-status-badge status-${ord.order_status || 'pending'}">${(ord.order_status || 'pending').toUpperCase()}</span>
+          </div>
+
+          <div style="font-size: 0.92rem; color: var(--color-body-text); margin-bottom: 12px;">
+            Items: ${ord.items ? ord.items.length : 1} handcrafted item(s) • Total: <strong style="color: var(--color-forest-green);">৳${ord.total_amount}</strong> (${ord.payment_method === 'cod' ? 'Cash on Delivery' : 'Online Paid'})
+          </div>
+
+          <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button onclick="alert('Order #${ord.order_number} is being prepared in our Dhaka kitchen.')" class="btn btn-secondary btn-sm">Track Batch</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function initAccount() {
+      const user = nutoraAuth.currentUser;
+      if (!user) {
+        // If not logged in, auto populate default guest customer for immediate preview
+        nutoraAuth.login('customer@example.com', 'demo');
+        return;
+      }
+
+      document.getElementById('userNameDisplay').textContent = user.fullName || 'Customer';
+      document.getElementById('userInitial').textContent = (user.fullName || 'C')[0].toUpperCase();
+      document.getElementById('userRoleBadge').textContent = user.role.toUpperCase();
+
+      if (document.getElementById('profName')) document.getElementById('profName').value = user.fullName || '';
+      if (document.getElementById('profPhone')) document.getElementById('profPhone').value = user.phone || '';
+      if (document.getElementById('profEmail')) document.getElementById('profEmail').value = user.email || '';
+
+      if (user.role === 'super_admin' || user.role === 'editor') {
+        document.getElementById('adminShortcutWrapper').style.display = 'block';
+      }
+
+      renderUserOrders();
+    }
+
+    async function handleLogout() {
+      await nutoraAuth.logout();
+      window.location.href = 'index.html';
+    }
+
+    function handleProfileUpdate(e) {
+      e.preventDefault();
+      const user = nutoraAuth.currentUser;
+      if (user) {
+        user.fullName = document.getElementById('profName').value;
+        user.phone = document.getElementById('profPhone').value;
+        nutoraAuth.saveSession(user);
+        alert('Profile details updated successfully!');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initAccount);
+    document.addEventListener('nutora:auth-changed', initAccount);
+  </script>
+</body>
+</html>
