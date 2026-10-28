@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting — NUTORA</title>
+  <script src="/js/auth.js"></script>
+  <script>
+    (function() {
+      if (typeof nutoraAuth !== 'undefined' && nutoraAuth.isStaff()) {
+        window.location.replace('/admin/orders.html');
+      } else {
+        window.location.replace('/account.html');
+      }
+    })();
+  </script>
+</head>
+<body style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #FFF9EB; color: #103523;">
+  <p>🌿 Loading NUTORA Orders...</p>
+</body>
+</html>
