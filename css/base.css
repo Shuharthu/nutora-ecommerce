@@ -1,0 +1,166 @@
+/* ==========================================================================
+   NUTORA — BASE STYLES & RESET
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-cream);
+  color: var(--color-body-text);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Typography Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  color: var(--color-deep-green);
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+h1 { font-size: clamp(2.2rem, 4.2vw, 3.4rem); }
+h2 { font-size: clamp(1.8rem, 3.2vw, 2.4rem); }
+h3 { font-size: clamp(1.35rem, 2.2vw, 1.7rem); }
+h4 { font-size: 1.2rem; }
+h5 { font-size: 1.05rem; }
+h6 { font-size: 0.95rem; }
+
+p {
+  color: var(--color-body-text);
+  font-size: 1rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+img, svg, picture {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+button {
+  cursor: pointer;
+  user-select: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* Accessibility Focus Ring */
+:focus-visible {
+  outline: 3px solid var(--color-honey-gold);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-pad);
+  padding-right: var(--container-pad);
+}
+
+/* Screen Reader Only Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Badge styling */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge-gold {
+  background: var(--color-warm-gold-light);
+  color: var(--color-peanut-brown);
+  border: 1px solid var(--color-honey-gold);
+}
+
+.badge-green {
+  background: rgba(23, 69, 47, 0.1);
+  color: var(--color-forest-green);
+  border: 1px solid rgba(23, 69, 47, 0.2);
+}
+
+/* Section Header Styles */
+.section-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto var(--space-2xl);
+}
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-honey-gold);
+  margin-bottom: var(--space-xs);
+}
+
+.section-tag::before,
+.section-tag::after {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-honey-gold);
+}
+
+.section-subtitle {
+  color: var(--color-muted-text);
+  font-size: 1.08rem;
+  margin-top: var(--space-xs);
+}

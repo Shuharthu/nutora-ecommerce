@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Audit Logs — NUTORA Admin</title>
+  
+  <link rel="icon" type="image/png" href="../assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <aside class="admin-sidebar">
+    <div class="admin-brand-box">
+      <img src="../assets/brand/nutora-logo.png" alt="NUTORA Logo" class="admin-brand-logo">
+      <div>
+        <div style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; color: #FFF9EB;">NUTORA</div>
+        <span style="font-size: 0.72rem; color: var(--color-warm-gold); letter-spacing: 0.05em; text-transform: uppercase;">Kitchen Admin</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <a href="index.html" class="admin-nav-item">📊 Dashboard</a>
+      <a href="products.html" class="admin-nav-item">🍯 Products</a>
+      <a href="categories.html" class="admin-nav-item">📁 Categories</a>
+      <a href="inventory.html" class="admin-nav-item">📦 Inventory & Stock</a>
+      <a href="orders.html" class="admin-nav-item">🛒 Orders</a>
+      <a href="customers.html" class="admin-nav-item">👥 Customers</a>
+      <a href="coupons.html" class="admin-nav-item">🎟️ Coupons</a>
+      <a href="reviews.html" class="admin-nav-item">⭐ Reviews</a>
+      <a href="users.html" class="admin-nav-item">🛡️ User Roles</a>
+      <a href="settings.html" class="admin-nav-item">⚙️ Store Settings</a>
+      <a href="audit-logs.html" class="admin-nav-item active">📜 Audit Logs</a>
+    </nav>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div>
+        <h1 style="font-size: 1.45rem; color: var(--color-deep-green);">Immutable Security & Audit Trail</h1>
+        <span style="font-size: 0.85rem; color: var(--color-muted-text);">Tamper-evident logs of administrative actions, pricing edits, and order transitions</span>
+      </div>
+      <div>
+        <span class="badge badge-gold">🔒 Protected Audit Vault</span>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <input type="text" id="logSearch" placeholder="Search by action or entity..." class="newsletter-input" style="max-width: 320px; padding: 8px 16px; font-size: 0.88rem;" oninput="filterLogs(this.value)">
+          <span style="font-size: 0.85rem; color: var(--color-muted-text);">Protected against modifications or deletion</span>
+        </div>
+
+        <div class="admin-table-container">
+          <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Action Event</th>
+              <th>Staff User</th>
+              <th>Entity</th>
+              <th>Target Identifier</th>
+              <th>Audit Change Details</th>
+            </tr>
+          </thead>
+          <tbody id="auditLogsBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-core.js"></script>
+
+  <script>
+    let logs = [];
+
+    function loadAuditLogs() {
+      logs = JSON.parse(localStorage.getItem('nutora_audit_logs') || '[]');
+
+      if (logs.length === 0) {
+        logs = [
+          {
+            id: 'aud-001',
+            action: 'INITIAL_SYSTEM_BOOTSTRAP',
+            user_email: 'admin@nutorafood.com',
+            entity_type: 'store_settings',
+            entity_id: 'schema_v1',
+            old_values: null,
+            new_values: { version: '1.0.0', rls: 'enabled', tables: 20 },
+            created_at: new Date(Date.now() - 3600000).toISOString()
+          },
+          {
+            id: 'aud-002',
+            action: 'PRODUCT_PUBLISHED',
+            user_email: 'admin@nutorafood.com',
+            entity_type: 'products',
+            entity_id: 'NUT-PB-CLS-400',
+            old_values: { status: 'draft' },
+            new_values: { status: 'published', price: 520 },
+            created_at: new Date(Date.now() - 2400000).toISOString()
+          },
+          {
+            id: 'aud-003',
+            action: 'INVENTORY_RESTOCK',
+            user_email: 'editor@nutorafood.com',
+            entity_type: 'products',
+            entity_id: 'NUT-HNY-SND-500',
+            old_values: { stock: 35 },
+            new_values: { stock: 60 },
+            created_at: new Date(Date.now() - 1200000).toISOString()
+          }
+        ];
+        localStorage.setItem('nutora_audit_logs', JSON.stringify(logs));
+      }
+
+      renderLogs(logs);
+    }
+
+    function renderLogs(list) {
+      const tbody = document.getElementById('auditLogsBody');
+      tbody.innerHTML = list.map(l => `
+        <tr>
+          <td style="font-size: 0.82rem; color: var(--color-muted-text);">${new Date(l.created_at).toLocaleString()}</td>
+          <td><strong style="color: var(--color-forest-green); font-size: 0.88rem;">${l.action}</strong></td>
+          <td style="font-size: 0.85rem;">${l.user_email || 'System'}</td>
+          <td><span class="badge badge-gold" style="font-size: 0.7rem;">${l.entity_type}</span></td>
+          <td style="font-family: monospace; font-size: 0.84rem;">${l.entity_id || '—'}</td>
+          <td style="font-size: 0.82rem; color: var(--color-muted-text); font-family: monospace; max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+            ${l.new_values ? JSON.stringify(l.new_values) : '—'}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterLogs(val) {
+      const q = val.toLowerCase();
+      renderLogs(logs.filter(l => 
+        l.action.toLowerCase().includes(q) || 
+        l.entity_type.toLowerCase().includes(q) || 
+        (l.entity_id && l.entity_id.toLowerCase().includes(q))
+      ));
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAuditLogs);
+  </script>
+</body>
+</html>

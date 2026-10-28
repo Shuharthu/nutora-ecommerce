@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NUTORA — Homemade With Love | Straight Out of Mother's Kitchen</title>
+  
+  <!-- SEO & Open Graph Meta -->
+  <meta name="description" content="Nutora brings authentic homemade peanut butter, pure Sundarban raw honey, traditional bilona cow ghee, and artisanal Bangladeshi pantry delights straight to your table.">
+  <meta property="og:title" content="NUTORA — Homemade With Love">
+  <meta property="og:description" content="Pure, wholesome homemade foods crafted with real ingredients, zero chemical preservatives, just like Mom used to make.">
+  <meta property="og:image" content="assets/brand/nutora-logo.png">
+  <meta property="og:type" content="website">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/favicon-192.png">
+  <link rel="apple-touch-icon" href="assets/brand/favicon-192.png">
+
+  <!-- Typography Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/storefront.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- 1. ANNOUNCEMENT BAR -->
+  <aside class="announcement-bar" role="region" aria-label="Store announcement">
+    <div class="container announcement-content">
+      <span>🌿 <strong>Fresh Kitchen Batches Ready:</strong> Free delivery on Dhaka orders over ৳1,500!</span>
+      <span class="announcement-highlight">Cash on Delivery across Bangladesh</span>
+      <a href="#featured-products" class="announcement-link">Order Fresh Batch &rarr;</a>
+    </div>
+  </aside>
+
+  <!-- 2. SITE HEADER & NAVIGATION -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <!-- Official Brand Identity -->
+      <a href="index.html" class="brand-link" aria-label="NUTORA Homepage">
+        <img src="assets/brand/nutora-logo.png" alt="NUTORA Official Logo" class="brand-emblem" width="62" height="62">
+        <div class="brand-typography">
+          <span class="brand-name">NUTORA</span>
+          <span class="brand-tagline">Straight Out of Mother's Kitchen</span>
+        </div>
+      </a>
+
+      <!-- Main Navigation Links -->
+      <nav class="nav-menu" aria-label="Primary Navigation">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="#categories" class="nav-link">Categories</a>
+        <a href="#featured-products" class="nav-link">Shop</a>
+        <a href="#why-choose-us" class="nav-link">Why NUTORA</a>
+        <a href="#brand-story" class="nav-link">Our Story</a>
+        <a href="#footer" class="nav-link">Contact</a>
+      </nav>
+
+      <!-- Nav Action Controls -->
+      <div class="nav-actions">
+        <!-- Quick Search -->
+        <a href="#featured-products" class="btn-icon" title="Search Products" aria-label="Search Products">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </a>
+
+        <!-- Customer Account / Login -->
+        <a href="account.html" class="btn-icon" title="Account" aria-label="Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+
+        <!-- Interactive Cart Trigger -->
+        <button id="cartBtn" class="btn-icon cart-btn" aria-label="View shopping basket">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span id="cartCount" class="cart-count">0</span>
+        </button>
+
+        <a href="#featured-products" class="btn btn-primary btn-sm">Shop Now</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. HERO SECTION -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-pill">
+          <span class="icon">♥</span>
+          <span>HOMEMADE WITH LOVE • 100% PURE & NATURAL</span>
+        </div>
+
+        <h1 class="hero-title">
+          Pure Homemade Foods, <br>
+          <span class="highlight">Straight Out of Mother's Kitchen.</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Experience the warmth and uncompromised purity of genuine home cooking. Handcrafted in small batches using real ingredients, traditional Bengali recipes, and zero chemical preservatives.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#featured-products" class="btn btn-gold btn-lg">Shop Fresh Batches</a>
+          <a href="#brand-story" class="btn btn-outline btn-lg">Our Kitchen Story</a>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="hero-trust-row">
+          <div class="trust-item">
+            <div class="trust-icon">🌱</div>
+            <div class="trust-text">
+              Real Ingredients
+              <span>No synthetic additives</span>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">🥣</div>
+            <div class="trust-text">
+              Small Fresh Batches
+              <span>Slow-cooked with love</span>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">🚚</div>
+            <div class="trust-text">
+              Cash on Delivery
+              <span>All over Bangladesh</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual Showcase -->
+      <div class="hero-visual-wrap">
+        <div class="hero-brand-stage">
+          <!-- Floating Feature Badges -->
+          <div class="floating-badge floating-badge-1">
+            <span class="floating-icon-dot"></span>
+            <span>Raw Sundarban Honey</span>
+          </div>
+
+          <img src="assets/brand/nutora-logo.png" alt="NUTORA Official Homemade Brand Badge" class="hero-brand-logo">
+
+          <div class="floating-badge floating-badge-2">
+            <span class="floating-icon-dot"></span>
+            <span>Danedar Pure Cow Ghee</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. PRODUCT CATEGORIES -->
+  <section id="categories" class="categories-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Explore The Pantry</span>
+        <h2>Handcrafted Categories</h2>
+        <p class="section-subtitle">Every jar tells a story of wholesome tradition, authentic taste, and mother's kitchen care.</p>
+      </div>
+
+      <div class="categories-grid">
+        <a href="#featured-products" class="category-card" onclick="document.querySelector('[data-filter=honey]')?.click();">
+          <div class="category-icon-wrap">🍯</div>
+          <h3 class="category-title">Organic Honey</h3>
+          <span class="category-count">Wild & Unfiltered</span>
+        </a>
+
+        <a href="#featured-products" class="category-card" onclick="document.querySelector('[data-filter=peanut-butter]')?.click();">
+          <div class="category-icon-wrap">🥜</div>
+          <h3 class="category-title">Homemade Peanut Butter</h3>
+          <span class="category-count">Creamy & Roasted</span>
+        </a>
+
+        <a href="#featured-products" class="category-card" onclick="document.querySelector('[data-filter=ghee]')?.click();">
+          <div class="category-icon-wrap">🧈</div>
+          <h3 class="category-title">Pure Ghee</h3>
+          <span class="category-count">Traditional Bilona</span>
+        </a>
+
+        <a href="#featured-products" class="category-card" onclick="document.querySelector('[data-filter=fresh]')?.click();">
+          <div class="category-icon-wrap">🏺</div>
+          <h3 class="category-title">Mishti Doi</h3>
+          <span class="category-count">Bogra Earthen Pots</span>
+        </a>
+
+        <a href="#featured-products" class="category-card" onclick="document.querySelector('[data-filter=homemade]')?.click();">
+          <div class="category-icon-wrap">🌶️</div>
+          <h3 class="category-title">Traditional Homemade Foods</h3>
+          <span class="category-count">Authentic Achars</span>
+        </a>
+
+        <a href="#featured-products" class="category-card" onclick="document.querySelector('[data-filter=pantry]')?.click();">
+          <div class="category-icon-wrap">🌾</div>
+          <h3 class="category-title">Natural Pantry</h3>
+          <span class="category-count">Mustard Oil & Pink Salt</span>
+        </a>
+
+        <a href="#featured-products" class="category-card" onclick="document.querySelector('[data-filter=gifts]')?.click();">
+          <div class="category-icon-wrap">🎁</div>
+          <h3 class="category-title">Gift Boxes</h3>
+          <span class="category-count">Handcrafted Hampers</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. FEATURED PRODUCTS & SHOP -->
+  <section id="featured-products" class="featured-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Fresh Kitchen Batches</span>
+        <h2>Our Purest Offerings</h2>
+        <p class="section-subtitle">Freshly prepared in limited batches. Free from artificial preservatives, colors, and synthetic flavorings.</p>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="filter-tabs" role="tablist">
+        <button class="filter-tab active" data-filter="all">All Fresh Batches</button>
+        <button class="filter-tab" data-filter="bestseller">Kitchen Bestsellers</button>
+        <button class="filter-tab" data-filter="honey">Pure Raw Honey</button>
+        <button class="filter-tab" data-filter="peanut-butter">Artisan Peanut Butter</button>
+        <button class="filter-tab" data-filter="ghee">Danedar Ghee</button>
+        <button class="filter-tab" data-filter="homemade">Mom's Achars</button>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="productsGrid" class="products-grid">
+        <!-- Rendered reactively via js/main.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. WHY CHOOSE NUTORA -->
+  <section id="why-choose-us" class="why-us-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">The NUTORA Difference</span>
+        <h2>Why Choose Mother's Kitchen?</h2>
+        <p class="section-subtitle">In a world of factory-produced packaged food, we hold firm to genuine homemade integrity.</p>
+      </div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon-box">❤️</div>
+          <h3 class="pillar-title">Made with Real Ingredients</h3>
+          <p class="pillar-desc">Just like Mom used to make. We select wholesome peanuts, pure wildflower nectar, whole cow milk, and authentic spices with zero artificial shortcuts.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon-box">🌿</div>
+          <h3 class="pillar-title">Zero Chemical Preservatives</h3>
+          <p class="pillar-desc">No potassium sorbate, no artificial colors, no palm oil, and no synthetic thickening agents. Clean food your children and elders can enjoy with complete peace of mind.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon-box">🥣</div>
+          <h3 class="pillar-title">Slow & Small Batch Method</h3>
+          <p class="pillar-desc">We never mass-manufacture. Our products are prepared weekly in small, hygienic batches to ensure maximum nutritional value, freshness, and authentic aroma.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon-box">📦</div>
+          <h3 class="pillar-title">Carefully Packed & Delivered</h3>
+          <p class="pillar-desc">Protected with eco-friendly cushioning and shipped in sanitized food-grade glass jars across all 64 districts with reliable Cash on Delivery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. BRAND STORY -->
+  <section id="brand-story" class="story-section">
+    <div class="container">
+      <div class="story-card-wrapper">
+        <div class="story-grid">
+          <div class="story-text-col">
+            <span class="story-tag">Our Heritage & Promise</span>
+            <h2 class="story-title">Straight Out of Mother's Kitchen</h2>
+            
+            <p class="story-quote">
+              "Made with real ingredients, just like Mom used to make."
+            </p>
+
+            <p class="story-body">
+              NUTORA was born out of a simple family longing: the desire for genuine, wholesome, home-cooked food that is completely honest. In Bangladeshi households, food is not just sustenance — it is maternal devotion, heritage, and healing.
+            </p>
+            <p class="story-body">
+              From our signature stone-ground peanut butter sweetened with pure raw honey to our golden bilona ghee slow-simmered over open flame, every jar from NUTORA carries the timeless recipe and loving care of a mother's hands.
+            </p>
+
+            <a href="#featured-products" class="btn btn-gold btn-lg">Experience The Taste</a>
+          </div>
+
+          <div class="story-visual">
+            <div class="story-emblem-badge">
+              <img src="assets/brand/nutora-logo.png" alt="NUTORA Emblem Badge">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. NEWSLETTER / KITCHEN CLUB -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="newsletter-box">
+        <div class="newsletter-text">
+          <h3>Join The Nutora Kitchen Family</h3>
+          <p>Receive alerts when fresh seasonal batches are prepared, plus exclusive heritage recipes and family offers.</p>
+        </div>
+        <form id="newsletterForm" class="newsletter-form" aria-label="Subscribe to newsletter">
+          <input type="email" class="newsletter-input" placeholder="Enter your email or phone number" required>
+          <button type="submit" class="btn btn-primary">Join Family</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. FOOTER -->
+  <footer id="footer" class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand Info -->
+        <div class="footer-brand-col">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="assets/brand/nutora-logo.png" alt="NUTORA" width="54" height="54">
+            <span style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 800; color: #FFF9EB;">NUTORA</span>
+          </div>
+          <p>
+            Authentic Bangladeshi homemade and natural food brand. Handcrafted with love, pure natural ingredients, and time-honored family recipes.
+          </p>
+          <div style="display: flex; gap: 12px; margin-top: 16px;">
+            <span class="badge badge-gold">100% Homemade</span>
+            <span class="badge" style="background: rgba(255,255,255,0.1); color: #FFF9EB;">Bangladesh Heritage</span>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#featured-products">Shop All Products</a></li>
+            <li><a href="#categories">Pantry Categories</a></li>
+            <li><a href="#brand-story">Our Story & Heritage</a></li>
+            <li><a href="#why-choose-us">Why Nutora</a></li>
+          </ul>
+        </div>
+
+        <!-- Product Categories -->
+        <div>
+          <h4 class="footer-heading">Categories</h4>
+          <ul class="footer-links">
+            <li><a href="#featured-products">Organic Honey</a></li>
+            <li><a href="#featured-products">Homemade Peanut Butter</a></li>
+            <li><a href="#featured-products">Pure Danedar Ghee</a></li>
+            <li><a href="#featured-products">Bogra Mishti Doi</a></li>
+            <li><a href="#featured-products">Traditional Achars</a></li>
+            <li><a href="#featured-products">Festive Gift Boxes</a></li>
+          </ul>
+        </div>
+
+        <!-- Customer Care & Contact -->
+        <div>
+          <h4 class="footer-heading">Customer Care</h4>
+          <div class="footer-contact-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span>+880 1712-345678 (WhatsApp & Calls)</span>
+          </div>
+          <div class="footer-contact-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <span>hello@nutorafood.com</span>
+          </div>
+          <div class="footer-contact-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Banani, Dhaka - 1213, Bangladesh</span>
+          </div>
+          <div style="margin-top: 16px; color: var(--color-warm-gold); font-size: 0.88rem;">
+            Delivery Hours: 9:00 AM – 8:00 PM (Daily)
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 NUTORA Homemade Foods. All rights reserved. Made with love in Bangladesh.
+        </div>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+          <a href="shipping-policy.html">Shipping Policy</a>
+          <a href="refund-policy.html">Return & Refund</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 10. INTERACTIVE CART DRAWER -->
+  <div id="cartDrawerOverlay" class="cart-drawer-overlay"></div>
+  <aside id="cartDrawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cartDrawerTitle">
+    <div class="cart-drawer-header">
+      <h3 id="cartDrawerTitle" class="cart-drawer-title">Your Kitchen Basket</h3>
+      <button id="closeCartDrawer" class="cart-drawer-close" aria-label="Close basket">&times;</button>
+    </div>
+    <div id="cartDrawerItems" class="cart-drawer-body">
+      <!-- Items dynamically populated -->
+    </div>
+    <div class="cart-drawer-footer">
+      <div class="cart-drawer-subtotal">
+        <span>Subtotal:</span>
+        <span id="cartDrawerSubtotal" style="color: var(--color-forest-green);">৳0</span>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--color-muted-text); margin-bottom: 14px;">
+        Shipping charges calculated during checkout. Cash on Delivery available!
+      </p>
+      <a href="checkout.html" class="btn btn-primary" style="width: 100%;">
+        Proceed to Checkout
+      </a>
+    </div>
+  </aside>
+
+  <!-- JavaScript Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

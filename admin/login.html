@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Sign In — NUTORA Kitchen Admin</title>
+  
+  <link rel="icon" type="image/png" href="../assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+
+  <style>
+    body {
+      background: radial-gradient(circle at 50% 20%, #17452F, #103523);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+    }
+
+    .login-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      max-width: 460px;
+      width: 100%;
+      padding: 44px 38px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+      border: 1px solid rgba(217, 154, 36, 0.3);
+    }
+
+    .login-logo {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: white;
+      padding: 3px;
+      box-shadow: var(--shadow-sm);
+      margin: 0 auto 14px;
+      display: block;
+    }
+
+    .field-group {
+      margin-bottom: 18px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--color-deep-green);
+      margin-bottom: 6px;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--color-light-border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition-fast);
+      box-sizing: border-box;
+    }
+
+    .field-input:focus {
+      border-color: var(--color-forest-green);
+      box-shadow: 0 0 0 3px rgba(23, 69, 47, 0.12);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <img src="../assets/brand/nutora-logo.png" alt="NUTORA Logo" class="login-logo">
+      <span class="section-tag" style="background: rgba(23, 69, 47, 0.1); color: var(--color-forest-green);">Administrative Portal</span>
+      <h1 style="font-size: 1.65rem; color: var(--color-deep-green); margin-top: 8px;">Kitchen Admin Sign In</h1>
+      <p style="font-size: 0.88rem; color: var(--color-muted-text); margin-top: 4px;">
+        Authorized Super Admin & Editor access only.
+      </p>
+    </div>
+
+    <div id="loginAlert" style="display: none; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 0.88rem;"></div>
+
+    <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+      <div class="field-group">
+        <label class="field-label">Admin Email Address</label>
+        <input type="email" id="adminEmail" required class="field-input" placeholder="e.g. admin@nutorafood.com">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <input type="password" id="adminPassword" required class="field-input" placeholder="••••••••">
+      </div>
+
+      <button type="submit" id="btnAdminLogin" class="btn btn-primary" style="width: 100%; padding: 13px; font-size: 1.05rem; margin-top: 8px;">
+        Sign In to Dashboard
+      </button>
+    </form>
+
+    <div style="border-top: 1px solid var(--color-light-border); margin-top: 24px; padding-top: 20px; text-align: center; font-size: 0.86rem; color: var(--color-muted-text);">
+      <div>
+        Need to claim or customize Super Admin?
+        <a href="setup.html" style="color: var(--color-forest-green); font-weight: 700; display: block; margin-top: 4px;">👑 Set Up Super Admin Account &rarr;</a>
+      </div>
+      <div style="margin-top: 14px;">
+        <a href="../index.html" style="color: var(--color-muted-text); text-decoration: underline;">&larr; Return to Public Storefront</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+
+  <script>
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnAdminLogin');
+      const alertBox = document.getElementById('loginAlert');
+      const email = document.getElementById('adminEmail').value.trim();
+      const pass = document.getElementById('adminPassword').value;
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Verifying Credentials...';
+
+        const user = await nutoraAuth.login(email, pass);
+
+        if (user.role !== 'super_admin' && user.role !== 'editor') {
+          await nutoraAuth.logout();
+          throw new Error('Access Denied: This account does not have administrative privileges. Only Super Admin and Editors may access this portal.');
+        }
+
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#E8F5E9';
+        alertBox.style.color = '#2E7D32';
+        alertBox.style.border = '1px solid #C8E6C9';
+        alertBox.textContent = `✓ Signed in successfully as ${user.role.toUpperCase()}. Redirecting...`;
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 800);
+      } catch (err) {
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#FFEBEE';
+        alertBox.style.color = '#C62828';
+        alertBox.style.border = '1px solid #FFCDD2';
+        alertBox.textContent = err.message || 'Login failed. Please check your credentials.';
+        btn.disabled = false;
+        btn.textContent = 'Sign In to Dashboard';
+      }
+    }
+  </script>
+</body>
+</html>

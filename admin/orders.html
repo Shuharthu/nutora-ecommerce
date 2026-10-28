@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Orders — NUTORA Admin</title>
+  
+  <link rel="icon" type="image/png" href="../assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+
+  <style>
+    .order-status-select {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--color-light-border);
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="admin-body">
+
+  <!-- Admin Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-brand-box">
+      <img src="../assets/brand/nutora-logo.png" alt="NUTORA Logo" class="admin-brand-logo">
+      <div>
+        <div style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; color: #FFF9EB;">NUTORA</div>
+        <span style="font-size: 0.72rem; color: var(--color-warm-gold); letter-spacing: 0.05em; text-transform: uppercase;">Kitchen Admin</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <a href="index.html" class="admin-nav-item">📊 Dashboard</a>
+      <a href="products.html" class="admin-nav-item">🍯 Products</a>
+      <a href="categories.html" class="admin-nav-item">📁 Categories</a>
+      <a href="inventory.html" class="admin-nav-item">📦 Inventory & Stock</a>
+      <a href="orders.html" class="admin-nav-item active">🛒 Orders</a>
+      <a href="customers.html" class="admin-nav-item">👥 Customers</a>
+      <a href="coupons.html" class="admin-nav-item">🎟️ Coupons</a>
+      <a href="reviews.html" class="admin-nav-item">⭐ Reviews</a>
+      <a href="users.html" class="admin-nav-item">🛡️ User Roles</a>
+      <a href="settings.html" class="admin-nav-item">⚙️ Store Settings</a>
+      <a href="audit-logs.html" class="admin-nav-item">📜 Audit Logs</a>
+    </nav>
+  </aside>
+
+  <!-- Admin Main -->
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div>
+        <h1 style="font-size: 1.45rem; color: var(--color-deep-green);">Order Fulfillment & Tracking</h1>
+        <span style="font-size: 0.85rem; color: var(--color-muted-text);">Monitor customer dispatches, update order states, and generate invoices</span>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="exportOrdersCSV()" class="btn btn-secondary btn-sm">Export Orders CSV</button>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+            <input type="text" id="orderSearchInput" placeholder="Search order #, customer or phone..." class="newsletter-input" style="max-width: 320px; padding: 8px 16px; font-size: 0.88rem;" oninput="filterOrdersTable(this.value)">
+            
+            <select id="statusFilterSelect" class="newsletter-input" style="padding: 8px 16px; font-size: 0.88rem; width: auto;" onchange="filterOrdersByStatus(this.value)">
+              <option value="all">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <span id="orderCountBadge" class="badge badge-gold">0 Orders</span>
+        </div>
+
+        <div class="admin-table-container">
+          <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Phone</th>
+              <th>Destination</th>
+              <th>Total Amount</th>
+              <th>Payment</th>
+              <th>Order Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminOrdersBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Order Details & Invoice Modal -->
+  <div id="orderDetailModal" class="admin-modal-overlay">
+    <div class="admin-modal" style="max-width: 720px;">
+      <div class="admin-modal-header">
+        <div>
+          <h3 id="modalOrderNumber" style="color: var(--color-deep-green);">Order Details</h3>
+          <span id="modalOrderDate" style="font-size: 0.82rem; color: var(--color-muted-text);"></span>
+        </div>
+        <button onclick="closeOrderModal()" style="font-size: 1.4rem; cursor: pointer;">&times;</button>
+      </div>
+      <div class="admin-modal-body" id="modalOrderContent">
+        <!-- Injected dynamically -->
+      </div>
+      <div class="admin-modal-footer">
+        <button onclick="window.print()" class="btn btn-secondary btn-sm">Print Invoice</button>
+        <button onclick="closeOrderModal()" class="btn btn-primary btn-sm">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-core.js"></script>
+  <script src="../js/db-modal.js"></script>
+
+  <script>
+    let allOrders = [];
+
+    function loadOrders() {
+      allOrders = JSON.parse(localStorage.getItem('nutora_orders') || '[]');
+
+      // If empty in fresh session, populate with 2 demo orders for immediate testing
+      if (allOrders.length === 0) {
+        allOrders = [
+          {
+            order_id: 'ord-101',
+            order_number: 'NUT-20261027-A84F',
+            customer_name: 'Shuharthu Barua',
+            customer_phone: '01712345678',
+            delivery_division: 'Dhaka',
+            delivery_district: 'Dhaka',
+            delivery_upazila: 'Banani',
+            delivery_address: 'House 42, Road 11, Block D',
+            delivery_instructions: 'Handle glass jars with care',
+            total_amount: 1040,
+            shipping_fee: 70,
+            payment_method: 'cod',
+            order_status: 'pending',
+            payment_status: 'pending',
+            created_at: new Date().toISOString(),
+            items: [
+              { product_id: 'prod-001', name: 'Classic Homemade Peanut Butter', weight: '400g Jar', price: 520, quantity: 2 }
+            ]
+          },
+          {
+            order_id: 'ord-102',
+            order_number: 'NUT-20261026-F91C',
+            customer_name: 'Nusrat Jahan',
+            customer_phone: '01819998877',
+            delivery_division: 'Chittagong',
+            delivery_district: 'Chittagong',
+            delivery_upazila: 'Panchlaish',
+            delivery_address: 'GEC Circle, Green View Tower',
+            total_amount: 1890,
+            shipping_fee: 130,
+            payment_method: 'cod',
+            order_status: 'confirmed',
+            payment_status: 'pending',
+            created_at: new Date(Date.now() - 86400000).toISOString(),
+            items: [
+              { product_id: 'prod-002', name: 'Sundarban Wildflower Raw Honey', weight: '500g Glass Jar', price: 780, quantity: 1 },
+              { product_id: 'prod-003', name: 'Pure Bilona Danedar Cow Ghee', weight: '450g Glass Jar', price: 980, quantity: 1 }
+            ]
+          }
+        ];
+        localStorage.setItem('nutora_orders', JSON.stringify(allOrders));
+      }
+
+      renderOrders(allOrders);
+    }
+
+    function renderOrders(list) {
+      const tbody = document.getElementById('adminOrdersBody');
+      document.getElementById('orderCountBadge').textContent = `${list.length} Orders`;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 32px; color: var(--color-muted-text);">No matching orders found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(o => `
+        <tr>
+          <td><strong style="color: var(--color-deep-green); font-family: monospace;">#${o.order_number || o.order_id}</strong></td>
+          <td style="font-size: 0.82rem; color: var(--color-muted-text);">${new Date(o.created_at).toLocaleDateString()}</td>
+          <td><strong>${o.customer_name || 'Customer'}</strong></td>
+          <td style="font-size: 0.88rem;">${o.customer_phone || o.phone || '—'}</td>
+          <td>${o.delivery_district || o.district || 'Dhaka'}</td>
+          <td><strong style="color: var(--color-forest-green);">৳${o.total_amount}</strong></td>
+          <td><span class="badge badge-gold" style="font-size: 0.7rem;">${(o.payment_method || 'cod').toUpperCase()}</span></td>
+          <td>
+            <select class="order-status-select status-${o.order_status || 'pending'}" onchange="changeOrderStatus('${o.order_id || o.order_number}', this.value)">
+              <option value="pending" ${(o.order_status === 'pending' || !o.order_status) ? 'selected' : ''}>Pending</option>
+              <option value="confirmed" ${o.order_status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+              <option value="processing" ${o.order_status === 'processing' ? 'selected' : ''}>Processing</option>
+              <option value="shipped" ${o.order_status === 'shipped' ? 'selected' : ''}>Shipped</option>
+              <option value="delivered" ${o.order_status === 'delivered' ? 'selected' : ''}>Delivered</option>
+              <option value="cancelled" ${o.order_status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+            </select>
+          </td>
+          <td>
+            <button onclick="viewOrderDetails('${o.order_id || o.order_number}')" class="btn btn-secondary btn-sm" style="padding: 4px 10px;">Details</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterOrdersTable(val) {
+      const q = val.toLowerCase();
+      const filtered = allOrders.filter(o => 
+        (o.order_number && o.order_number.toLowerCase().includes(q)) ||
+        (o.customer_name && o.customer_name.toLowerCase().includes(q)) ||
+        (o.customer_phone && o.customer_phone.includes(q))
+      );
+      renderOrders(filtered);
+    }
+
+    function filterOrdersByStatus(status) {
+      if (status === 'all') {
+        renderOrders(allOrders);
+      } else {
+        renderOrders(allOrders.filter(o => (o.order_status || 'pending') === status));
+      }
+    }
+
+    function changeOrderStatus(orderId, newStatus) {
+      const order = allOrders.find(o => (o.order_id === orderId || o.order_number === orderId));
+      if (!order) return;
+
+      const oldStatus = order.order_status || 'pending';
+      order.order_status = newStatus;
+      localStorage.setItem('nutora_orders', JSON.stringify(allOrders));
+
+      // Append to audit log
+      const logs = JSON.parse(localStorage.getItem('nutora_audit_logs') || '[]');
+      logs.unshift({
+        id: 'aud-' + Date.now(),
+        action: 'ORDER_STATUS_CHANGED',
+        user_email: nutoraAuth.currentUser?.email || 'admin@nutorafood.com',
+        entity_type: 'orders',
+        entity_id: order.order_number || order.order_id,
+        old_values: { status: oldStatus },
+        new_values: { status: newStatus },
+        created_at: new Date().toISOString()
+      });
+      localStorage.setItem('nutora_audit_logs', JSON.stringify(logs));
+
+      renderOrders(allOrders);
+      alert(`Order #${order.order_number} status updated to ${newStatus.toUpperCase()}`);
+    }
+
+    function viewOrderDetails(orderId) {
+      const order = allOrders.find(o => (o.order_id === orderId || o.order_number === orderId));
+      if (!order) return;
+
+      document.getElementById('modalOrderNumber').textContent = `Order #${order.order_number || order.order_id}`;
+      document.getElementById('modalOrderDate').textContent = `Placed on ${new Date(order.created_at).toLocaleString()}`;
+
+      const itemsHtml = (order.items || []).map(i => `
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--color-light-border);">
+          <div>
+            <strong>${i.name || 'Homemade Item'}</strong>
+            <div style="font-size: 0.82rem; color: var(--color-muted-text);">${i.weight || ''} &times; ${i.quantity || 1}</div>
+          </div>
+          <strong style="color: var(--color-forest-green);">৳${(i.price || 0) * (i.quantity || 1)}</strong>
+        </div>
+      `).join('');
+
+      document.getElementById('modalOrderContent').innerHTML = `
+        <div style="background: #FFF9EB; padding: 18px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--color-light-border);">
+          <h4 style="color: var(--color-deep-green); margin-bottom: 8px;">Customer & Delivery Information</h4>
+          <p style="margin: 0; font-size: 0.92rem; line-height: 1.6;">
+            <strong>Recipient:</strong> ${order.customer_name || 'Customer'}<br>
+            <strong>Phone:</strong> ${order.customer_phone || order.phone || '—'}<br>
+            <strong>Address:</strong> ${order.delivery_address || order.address || ''}, ${order.delivery_upazila || ''}, ${order.delivery_district || 'Dhaka'}<br>
+            <strong>Note:</strong> ${order.delivery_instructions || 'None'}
+          </p>
+        </div>
+
+        <h4 style="color: var(--color-deep-green); margin-bottom: 12px;">Ordered Kitchen Batches</h4>
+        <div style="margin-bottom: 20px;">
+          ${itemsHtml || '<p style="color: var(--color-muted-text);">No item details recorded.</p>'}
+        </div>
+
+        <div style="background: white; border-top: 2px solid var(--color-light-border); padding-top: 14px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span>Shipping:</span>
+            <strong>৳${order.shipping_fee || 70}</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 800; color: var(--color-forest-green);">
+            <span>Total Payable:</span>
+            <span>৳${order.total_amount}</span>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('orderDetailModal').classList.add('active');
+    }
+
+    function closeOrderModal() {
+      document.getElementById('orderDetailModal').classList.remove('active');
+    }
+
+    function exportOrdersCSV() {
+      let csv = "Order Number,Customer Name,Phone,District,Total Amount,Payment,Status,Date\n";
+      allOrders.forEach(o => {
+        csv += `"${o.order_number || o.order_id}","${o.customer_name}","${o.customer_phone}","${o.delivery_district}",${o.total_amount},"${o.payment_method}","${o.order_status}","${o.created_at}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `nutora-orders-${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    document.addEventListener('DOMContentLoaded', loadOrders);
+  </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customers Directory — NUTORA Admin</title>
+  
+  <link rel="icon" type="image/png" href="../assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <aside class="admin-sidebar">
+    <div class="admin-brand-box">
+      <img src="../assets/brand/nutora-logo.png" alt="NUTORA Logo" class="admin-brand-logo">
+      <div>
+        <div style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; color: #FFF9EB;">NUTORA</div>
+        <span style="font-size: 0.72rem; color: var(--color-warm-gold); letter-spacing: 0.05em; text-transform: uppercase;">Kitchen Admin</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <a href="index.html" class="admin-nav-item">📊 Dashboard</a>
+      <a href="products.html" class="admin-nav-item">🍯 Products</a>
+      <a href="categories.html" class="admin-nav-item">📁 Categories</a>
+      <a href="inventory.html" class="admin-nav-item">📦 Inventory & Stock</a>
+      <a href="orders.html" class="admin-nav-item">🛒 Orders</a>
+      <a href="customers.html" class="admin-nav-item active">👥 Customers</a>
+      <a href="coupons.html" class="admin-nav-item">🎟️ Coupons</a>
+      <a href="reviews.html" class="admin-nav-item">⭐ Reviews</a>
+      <a href="users.html" class="admin-nav-item">🛡️ User Roles</a>
+      <a href="settings.html" class="admin-nav-item">⚙️ Store Settings</a>
+      <a href="audit-logs.html" class="admin-nav-item">📜 Audit Logs</a>
+    </nav>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div>
+        <h1 style="font-size: 1.45rem; color: var(--color-deep-green);">Customer Directory</h1>
+        <span style="font-size: 0.85rem; color: var(--color-muted-text);">Registered customers & order history records</span>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <input type="text" placeholder="Search customer name or phone..." class="newsletter-input" style="max-width: 320px; padding: 8px 16px; font-size: 0.88rem;">
+          <span class="badge badge-gold">Verified Customers</span>
+        </div>
+
+        <div class="admin-table-container">
+          <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Customer Name</th>
+              <th>Contact Phone</th>
+              <th>Email</th>
+              <th>City / Division</th>
+              <th>Total Orders</th>
+              <th>Lifetime Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Shuharthu Barua</strong></td>
+              <td>01712345678</td>
+              <td>shuharthu@example.com</td>
+              <td>Dhaka</td>
+              <td>1 order</td>
+              <td><strong style="color: var(--color-forest-green);">৳1,040</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Nusrat Jahan</strong></td>
+              <td>01819998877</td>
+              <td>nusrat.jahan@example.com</td>
+              <td>Chittagong</td>
+              <td>1 order</td>
+              <td><strong style="color: var(--color-forest-green);">৳1,890</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Tanvir Ahmed</strong></td>
+              <td>01912445566</td>
+              <td>tanvir.ahmed@example.com</td>
+              <td>Sylhet</td>
+              <td>2 orders</td>
+              <td><strong style="color: var(--color-forest-green);">৳3,420</strong></td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-core.js"></script>
+</body>
+</html>

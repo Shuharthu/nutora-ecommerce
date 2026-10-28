@@ -1,0 +1,16 @@
+{
+  "name": "nutora",
+  "version": "1.0.0",
+  "description": "An authentic, fully responsive, production-ready e-commerce platform for **NUTORA**, a premium Bangladeshi homemade and natural food brand.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

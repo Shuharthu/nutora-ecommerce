@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Products — NUTORA Admin</title>
+  
+  <link rel="icon" type="image/png" href="../assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Admin Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-brand-box">
+      <img src="../assets/brand/nutora-logo.png" alt="NUTORA Logo" class="admin-brand-logo">
+      <div>
+        <div style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; color: #FFF9EB;">NUTORA</div>
+        <span style="font-size: 0.72rem; color: var(--color-warm-gold); letter-spacing: 0.05em; text-transform: uppercase;">Kitchen Admin</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <a href="index.html" class="admin-nav-item">📊 Dashboard</a>
+      <a href="products.html" class="admin-nav-item active">🍯 Products</a>
+      <a href="categories.html" class="admin-nav-item">📁 Categories</a>
+      <a href="inventory.html" class="admin-nav-item">📦 Inventory & Stock</a>
+      <a href="orders.html" class="admin-nav-item">🛒 Orders</a>
+      <a href="customers.html" class="admin-nav-item">👥 Customers</a>
+      <a href="coupons.html" class="admin-nav-item">🎟️ Coupons</a>
+      <a href="reviews.html" class="admin-nav-item">⭐ Reviews</a>
+      <a href="users.html" class="admin-nav-item">🛡️ User Roles</a>
+      <a href="settings.html" class="admin-nav-item">⚙️ Store Settings</a>
+      <a href="audit-logs.html" class="admin-nav-item">📜 Audit Logs</a>
+    </nav>
+  </aside>
+
+  <!-- Admin Main -->
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div>
+        <h1 style="font-size: 1.45rem; color: var(--color-deep-green);">Product Catalog Management</h1>
+        <span style="font-size: 0.85rem; color: var(--color-muted-text);">Create, update, archive, and price homemade items</span>
+      </div>
+      <div>
+        <button onclick="openProductModal()" class="btn btn-primary btn-sm">+ Add New Product</button>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <input type="text" id="prodSearchInput" placeholder="Filter by product name or SKU..." class="newsletter-input" style="max-width: 320px; padding: 8px 16px; font-size: 0.88rem;" oninput="filterProductsTable(this.value)">
+          <span id="prodCountBadge" class="badge badge-gold">8 Products</span>
+        </div>
+
+        <div class="admin-table-container">
+          <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>SKU</th>
+              <th>Category</th>
+              <th>Base Price</th>
+              <th>Sale Price</th>
+              <th>Stock</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminProductsBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Product Create / Edit Modal -->
+  <div id="productModal" class="admin-modal-overlay">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3 id="modalTitle" style="color: var(--color-deep-green);">Add New Homemade Product</h3>
+        <button onclick="closeProductModal()" style="font-size: 1.4rem; cursor: pointer;">&times;</button>
+      </div>
+      <form id="productForm" onsubmit="saveProduct(event)">
+        <div class="admin-modal-body">
+          <input type="hidden" id="editProdId">
+
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Product Title *</label>
+            <input type="text" id="pName" required class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. Classic Homemade Peanut Butter">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+            <div>
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Category *</label>
+              <select id="pCategory" class="newsletter-input" style="width: 100%; border-radius: 6px;">
+                <option value="Homemade Peanut Butter">Homemade Peanut Butter</option>
+                <option value="Organic Honey">Organic Honey</option>
+                <option value="Pure Ghee">Pure Ghee</option>
+                <option value="Mishti Doi">Mishti Doi</option>
+                <option value="Traditional Homemade Foods">Traditional Homemade Foods</option>
+                <option value="Natural Pantry">Natural Pantry</option>
+                <option value="Gift Boxes">Gift Boxes</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Weight / Volume *</label>
+              <input type="text" id="pWeight" required class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. 400g Glass Jar">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+            <div>
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Regular Price (৳) *</label>
+              <input type="number" id="pPrice" required min="1" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="580">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Sale Price (৳)</label>
+              <input type="number" id="pSalePrice" min="0" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="520">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Stock Quantity *</label>
+              <input type="number" id="pStock" required min="0" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="50">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Ingredients List</label>
+            <textarea id="pIngredients" rows="2" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. 100% Roasted Peanuts, Raw Honey, Himalayan Salt"></textarea>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Detailed Description</label>
+            <textarea id="pDesc" rows="3" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="Handcrafted with maternal care..."></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div>
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Publish Status</label>
+              <select id="pStatus" class="newsletter-input" style="width: 100%; border-radius: 6px;">
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Featured on Homepage</label>
+              <select id="pFeatured" class="newsletter-input" style="width: 100%; border-radius: 6px;">
+                <option value="true">Yes (Featured)</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-modal-footer">
+          <button type="button" onclick="closeProductModal()" class="btn btn-secondary btn-sm">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin-core.js"></script>
+  <script src="../js/db-modal.js"></script>
+
+  <script>
+    let localProducts = [];
+
+    async function loadAdminProducts() {
+      const stored = localStorage.getItem('nutora_catalog_override');
+      if (stored) {
+        localProducts = JSON.parse(stored);
+      } else {
+        localProducts = typeof DEMO_PRODUCTS !== 'undefined' ? [...DEMO_PRODUCTS] : [];
+      }
+      renderAdminProducts(localProducts);
+    }
+
+    function renderAdminProducts(list) {
+      const tbody = document.getElementById('adminProductsBody');
+      document.getElementById('prodCountBadge').textContent = `${list.length} Products`;
+
+      tbody.innerHTML = list.map(p => `
+        <tr>
+          <td>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <img src="../${p.image}" alt="" style="width: 44px; height: 44px; border-radius: 6px; object-fit: cover;">
+              <div>
+                <strong>${p.name}</strong>
+                <div style="font-size: 0.8rem; color: var(--color-muted-text);">${p.weight}</div>
+              </div>
+            </div>
+          </td>
+          <td style="font-family: monospace; font-size: 0.84rem;">${(p.id || 'NUT').toUpperCase()}</td>
+          <td>${p.category}</td>
+          <td><strong style="color: var(--color-forest-green);">৳${p.price}</strong></td>
+          <td>${p.originalPrice ? `<span style="color: var(--color-muted-text);">৳${p.originalPrice}</span>` : '—'}</td>
+          <td>
+            <span style="font-weight: 700; color: ${(p.stock_quantity || 45) < 30 ? 'var(--color-danger)' : 'var(--color-forest-green)'};">
+              ${p.stock_quantity || 45} in stock
+            </span>
+          </td>
+          <td>
+            <span class="badge ${p.status === 'draft' ? 'badge-gold' : 'badge-green'}" style="font-size: 0.72rem;">
+              ${p.status || 'Published'}
+            </span>
+          </td>
+          <td>
+            <div style="display: flex; gap: 8px;">
+              <button onclick="editProduct('${p.id}')" class="btn btn-secondary btn-sm" style="padding: 4px 10px;">Edit</button>
+              <button onclick="deleteProduct('${p.id}')" class="btn btn-outline btn-sm" style="padding: 4px 10px; color: var(--color-danger); border-color: var(--color-danger);">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterProductsTable(query) {
+      const q = query.toLowerCase();
+      const filtered = localProducts.filter(p => p.name.toLowerCase().includes(q) || (p.id && p.id.toLowerCase().includes(q)));
+      renderAdminProducts(filtered);
+    }
+
+    function openProductModal() {
+      document.getElementById('editProdId').value = '';
+      document.getElementById('modalTitle').textContent = 'Add New Homemade Product';
+      document.getElementById('productForm').reset();
+      document.getElementById('productModal').classList.add('active');
+    }
+
+    function closeProductModal() {
+      document.getElementById('productModal').classList.remove('active');
+    }
+
+    function editProduct(id) {
+      const prod = localProducts.find(p => p.id === id);
+      if (!prod) return;
+
+      document.getElementById('editProdId').value = prod.id;
+      document.getElementById('modalTitle').textContent = `Edit Product: ${prod.name}`;
+      document.getElementById('pName').value = prod.name;
+      document.getElementById('pCategory').value = prod.category;
+      document.getElementById('pWeight').value = prod.weight;
+      document.getElementById('pPrice').value = prod.price;
+      document.getElementById('pSalePrice').value = prod.originalPrice || '';
+      document.getElementById('pStock').value = prod.stock_quantity || 45;
+      document.getElementById('pDesc').value = prod.description || '';
+      document.getElementById('pIngredients').value = prod.ingredients || '';
+      document.getElementById('pStatus').value = prod.status || 'published';
+
+      document.getElementById('productModal').classList.add('active');
+    }
+
+    function saveProduct(e) {
+      e.preventDefault();
+      const id = document.getElementById('editProdId').value;
+      const name = document.getElementById('pName').value.trim();
+      const category = document.getElementById('pCategory').value;
+      const weight = document.getElementById('pWeight').value.trim();
+      const price = Number(document.getElementById('pPrice').value);
+      const salePrice = document.getElementById('pSalePrice').value ? Number(document.getElementById('pSalePrice').value) : null;
+      const stock = Number(document.getElementById('pStock').value);
+      const desc = document.getElementById('pDesc').value;
+      const status = document.getElementById('pStatus').value;
+
+      if (id) {
+        // Update existing
+        const item = localProducts.find(p => p.id === id);
+        if (item) {
+          item.name = name;
+          item.category = category;
+          item.weight = weight;
+          item.price = price;
+          item.originalPrice = salePrice;
+          item.stock_quantity = stock;
+          item.description = desc;
+          item.status = status;
+        }
+      } else {
+        // Create new
+        const newProd = {
+          id: 'prod-' + (localProducts.length + 1).toString().padStart(3, '0'),
+          name: name,
+          category: category,
+          weight: weight,
+          price: price,
+          originalPrice: salePrice,
+          stock_quantity: stock,
+          description: desc,
+          status: status,
+          image: 'assets/images/products/peanut-butter-classic.jpg',
+          badge: 'NEW BATCH',
+          rating: 5.0,
+          reviewCount: 0
+        };
+        localProducts.unshift(newProd);
+      }
+
+      localStorage.setItem('nutora_catalog_override', JSON.stringify(localProducts));
+      closeProductModal();
+      renderAdminProducts(localProducts);
+      alert('Product changes saved successfully!');
+    }
+
+    function deleteProduct(id) {
+      if (confirm('Are you sure you want to delete this product from the kitchen catalog?')) {
+        localProducts = localProducts.filter(p => p.id !== id);
+        localStorage.setItem('nutora_catalog_override', JSON.stringify(localProducts));
+        renderAdminProducts(localProducts);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAdminProducts);
+  </script>
+</body>
+</html>

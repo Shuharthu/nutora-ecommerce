@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join Kitchen Family — NUTORA Homemade Foods</title>
+  
+  <link rel="icon" type="image/png" href="assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/storefront.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .auth-container {
+      max-width: 480px;
+      margin: 64px auto 96px;
+      padding: 40px;
+      background: white;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-light-border);
+      box-shadow: var(--shadow-md);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link" aria-label="NUTORA Homepage">
+        <img src="assets/brand/nutora-logo.png" alt="NUTORA Logo" class="brand-emblem" width="62" height="62">
+        <div class="brand-typography">
+          <span class="brand-name">NUTORA</span>
+          <span class="brand-tagline">Straight Out of Mother's Kitchen</span>
+        </div>
+      </a>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline btn-sm">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="auth-container">
+      <div style="text-align: center; margin-bottom: 28px;">
+        <span class="section-tag">New Member</span>
+        <h1 style="font-size: 1.85rem; color: var(--color-deep-green); margin-top: 6px;">Create Your Account</h1>
+        <p style="font-size: 0.9rem; color: var(--color-muted-text); margin-top: 4px;">
+          Enjoy fresh kitchen batch alerts, fast address checkout, and order tracking.
+        </p>
+      </div>
+
+      <div id="regAlert" style="display: none; padding: 12px; border-radius: 8px; margin-bottom: 18px; font-size: 0.88rem;"></div>
+
+      <form id="regForm" onsubmit="handleRegisterSubmit(event)">
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">
+            Full Name *
+          </label>
+          <input type="text" id="regName" required class="newsletter-input" style="width: 100%; border-radius: var(--radius-md);" placeholder="e.g. Shuharthu Barua">
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">
+            Mobile Phone Number *
+          </label>
+          <input type="tel" id="regPhone" required class="newsletter-input" style="width: 100%; border-radius: var(--radius-md);" placeholder="e.g. 01712345678">
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">
+            Email Address *
+          </label>
+          <input type="email" id="regEmail" required class="newsletter-input" style="width: 100%; border-radius: var(--radius-md);" placeholder="e.g. yourname@example.com">
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <label style="display: block; font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 6px;">
+            Password (Min 8 Characters) *
+          </label>
+          <input type="password" id="regPassword" required minlength="8" class="newsletter-input" style="width: 100%; border-radius: var(--radius-md);" placeholder="••••••••">
+        </div>
+
+        <button type="submit" id="btnRegister" class="btn btn-primary" style="width: 100%; font-size: 1.05rem; padding: 14px;">
+          Create My Account
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 24px; font-size: 0.9rem; color: var(--color-muted-text);">
+        Already have an account? <a href="login.html" style="color: var(--color-forest-green); font-weight: 700;">Sign In Here &rarr;</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 NUTORA Homemade Foods. All rights reserved.</div>
+      <div style="display: flex; gap: 20px;">
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const pass = document.getElementById('regPassword').value;
+      const alertBox = document.getElementById('regAlert');
+      const btn = document.getElementById('btnRegister');
+
+      btn.disabled = true;
+      btn.textContent = 'Creating account...';
+
+      try {
+        const user = await nutoraAuth.register(name, email, phone, pass);
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#E8F5E9';
+        alertBox.style.color = '#17452F';
+        alertBox.textContent = `✓ Account registered successfully for ${name}!`;
+
+        setTimeout(() => {
+          window.location.href = 'account.html';
+        }, 800);
+      } catch (err) {
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#FFEBEE';
+        alertBox.style.color = '#C0392B';
+        alertBox.textContent = err.message || 'Registration failed.';
+        btn.disabled = false;
+        btn.textContent = 'Create My Account';
+      }
+    }
+  </script>
+</body>
+</html>

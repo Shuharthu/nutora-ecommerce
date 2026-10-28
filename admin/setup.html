@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup Master Super Admin — NUTORA</title>
+  
+  <link rel="icon" type="image/png" href="../assets/brand/favicon-32.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+
+  <style>
+    body {
+      background: radial-gradient(circle at 50% 20%, #17452F, #103523);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+    }
+
+    .setup-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      max-width: 520px;
+      width: 100%;
+      padding: 44px 40px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+      border: 1px solid rgba(217, 154, 36, 0.4);
+    }
+
+    .setup-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: white;
+      padding: 3px;
+      box-shadow: var(--shadow-sm);
+      margin: 0 auto 16px;
+      display: block;
+    }
+
+    .field-group {
+      margin-bottom: 18px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--color-deep-green);
+      margin-bottom: 6px;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--color-light-border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition-fast);
+      box-sizing: border-box;
+    }
+
+    .field-input:focus {
+      border-color: var(--color-forest-green);
+      box-shadow: 0 0 0 3px rgba(23, 69, 47, 0.12);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="setup-card">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <img src="../assets/brand/nutora-logo.png" alt="NUTORA Logo" class="setup-logo">
+      <span class="section-tag" style="background: rgba(217, 154, 36, 0.15); color: #B37D14;">Supreme Master Authority</span>
+      <h1 style="font-size: 1.75rem; color: var(--color-deep-green); margin-top: 8px;">Set Up Super Admin</h1>
+      <p style="font-size: 0.88rem; color: var(--color-muted-text); margin-top: 6px; line-height: 1.5;">
+        আপনার নিজের নাম, ইমেইল এবং মাস্টার পাসওয়ার্ড সেট করুন। কেবলমাত্র আপনিই এই স্টোরের সব পণ্য, অর্ডার ও অ্যাডমিনদের পরিচালনা করার একক ক্ষমতা পাবেন।
+      </p>
+    </div>
+
+    <div style="background: #FFF9EB; border-left: 4px solid var(--color-honey-gold); border-radius: 6px; padding: 12px 16px; font-size: 0.84rem; color: var(--color-peanut-brown); margin-bottom: 24px;">
+      🛡️ <strong>সিকিউরিটি পলিসি:</strong> সাধারণ ভিজিটর বা কাস্টমারদের কোনো অ্যাডমিন তৈরির সুযোগ নেই। কেবল সুপার অ্যাডমিনই অন্যান্য এডিটর তৈরি করতে পারেন।
+    </div>
+
+    <div id="setupAlert" style="display: none; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 0.88rem;"></div>
+
+    <form id="setupForm" onsubmit="handleSuperAdminSetup(event)">
+      <div class="field-group">
+        <label class="field-label">Your Full Name (আপনার নাম) *</label>
+        <input type="text" id="setupName" required class="field-input" placeholder="e.g. Shuharthu Tapash Barua">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Master Admin Email (আপনার ইমেইল) *</label>
+        <input type="email" id="setupEmail" required class="field-input" placeholder="e.g. admin@nutorafood.com">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Phone Number (মোবাইল নম্বর)</label>
+        <input type="tel" id="setupPhone" class="field-input" placeholder="e.g. 01712345678">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Master Password (মাস্টার পাসওয়ার্ড — সর্বনিম্ন ৮ অক্ষর) *</label>
+        <input type="password" id="setupPassword" required minlength="8" class="field-input" placeholder="••••••••">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Confirm Master Password (পাসওয়ার্ড নিশ্চিত করুন) *</label>
+        <input type="password" id="setupConfirmPassword" required minlength="8" class="field-input" placeholder="••••••••">
+      </div>
+
+      <button type="submit" id="btnSubmitSetup" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1.05rem; margin-top: 10px;">
+        👑 Claim & Activate Super Admin Account
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 24px; font-size: 0.85rem; color: var(--color-muted-text);">
+      Already configured? <a href="login.html" style="color: var(--color-forest-green); font-weight: 700;">Sign In to Dashboard &rarr;</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+
+  <script>
+    // Prefill with existing Super Admin details if available
+    document.addEventListener('DOMContentLoaded', () => {
+      const users = nutoraAuth.getUsers();
+      const admin = users.find(u => u.role === 'super_admin');
+      if (admin) {
+        document.getElementById('setupName').value = admin.fullName || '';
+        document.getElementById('setupEmail').value = admin.email || '';
+        document.getElementById('setupPhone').value = admin.phone || '';
+      }
+    });
+
+    async function handleSuperAdminSetup(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmitSetup');
+      const alertBox = document.getElementById('setupAlert');
+
+      const name = document.getElementById('setupName').value.trim();
+      const email = document.getElementById('setupEmail').value.trim();
+      const phone = document.getElementById('setupPhone').value.trim();
+      const pass = document.getElementById('setupPassword').value;
+      const confirmPass = document.getElementById('setupConfirmPassword').value;
+
+      if (pass !== confirmPass) {
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#FFEBEE';
+        alertBox.style.color = '#C62828';
+        alertBox.style.border = '1px solid #FFCDD2';
+        alertBox.textContent = 'পাসওয়ার্ড দুটি মিলেনি। অনুগ্রহ করে পুনরায় চেক করুন।';
+        return;
+      }
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Saving & Securing Credentials...';
+
+        await nutoraAuth.setSuperAdmin(name, email, phone, pass);
+
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#E8F5E9';
+        alertBox.style.color = '#2E7D32';
+        alertBox.style.border = '1px solid #C8E6C9';
+        alertBox.textContent = '✓ অভিনন্দন! আপনি সফলভাবে সুপার অ্যাডমিন হিসেবে এক্টিভেট হয়েছেন। ড্যাশবোর্ডে রিডাইরেক্ট করা হচ্ছে...';
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1200);
+      } catch (err) {
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#FFEBEE';
+        alertBox.style.color = '#C62828';
+        alertBox.style.border = '1px solid #FFCDD2';
+        alertBox.textContent = err.message || 'সেটআপে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।';
+        btn.disabled = false;
+        btn.textContent = '👑 Claim & Activate Super Admin Account';
+      }
+    }
+  </script>
+</body>
+</html>
