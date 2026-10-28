@@ -29,17 +29,17 @@
     </div>
 
     <nav class="admin-nav">
-      <a href="index.html" class="admin-nav-item">📊 Dashboard</a>
-      <a href="products.html" class="admin-nav-item">🍯 Products</a>
-      <a href="categories.html" class="admin-nav-item">📁 Categories</a>
-      <a href="inventory.html" class="admin-nav-item active">📦 Inventory & Stock</a>
-      <a href="orders.html" class="admin-nav-item">🛒 Orders</a>
-      <a href="customers.html" class="admin-nav-item">👥 Customers</a>
-      <a href="coupons.html" class="admin-nav-item">🎟️ Coupons</a>
-      <a href="reviews.html" class="admin-nav-item">⭐ Reviews</a>
-      <a href="users.html" class="admin-nav-item">🛡️ User Roles</a>
-      <a href="settings.html" class="admin-nav-item">⚙️ Store Settings</a>
-      <a href="audit-logs.html" class="admin-nav-item">📜 Audit Logs</a>
+      <a href="/admin/index.html" class="admin-nav-item">📊 Dashboard</a>
+      <a href="/admin/products.html" class="admin-nav-item">🍯 Products</a>
+      <a href="/admin/categories.html" class="admin-nav-item">📁 Categories</a>
+      <a href="/admin/inventory.html" class="admin-nav-item active">📦 Inventory & Stock</a>
+      <a href="/admin/orders.html" class="admin-nav-item">🛒 Orders</a>
+      <a href="/admin/customers.html" class="admin-nav-item">👥 Customers</a>
+      <a href="/admin/coupons.html" class="admin-nav-item">🎟️ Coupons</a>
+      <a href="/admin/reviews.html" class="admin-nav-item">⭐ Reviews</a>
+      <a href="/admin/users.html" class="admin-nav-item">🛡️ User Roles</a>
+      <a href="/admin/settings.html" class="admin-nav-item">⚙️ Store Settings</a>
+      <a href="/admin/audit-logs.html" class="admin-nav-item">📜 Audit Logs</a>
     </nav>
   </aside>
 
@@ -83,40 +83,50 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/products-data.js"></script>
   <script src="../js/config.js"></script>
   <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
   <script src="../js/admin-core.js"></script>
-  <script src="../js/db-modal.js"></script>
 
   <script>
     let invProducts = [];
 
     async function loadInventory() {
-      const stored = localStorage.getItem('nutora_catalog_override');
-      if (stored) {
-        invProducts = JSON.parse(stored);
-      } else {
-        invProducts = typeof DEMO_PRODUCTS !== 'undefined' ? [...DEMO_PRODUCTS] : [];
+      let prods = [];
+      if (window.nutoraDB && typeof nutoraDB.getProducts === 'function') {
+        prods = await nutoraDB.getProducts();
       }
+      if (!prods || prods.length === 0) {
+        const stored = localStorage.getItem('nutora_catalog_override');
+        if (stored) {
+          prods = JSON.parse(stored);
+        } else if (typeof DEMO_PRODUCTS !== 'undefined') {
+          prods = [...DEMO_PRODUCTS];
+        }
+      }
+      invProducts = prods || [];
       renderInventory(invProducts);
     }
 
     function renderInventory(list) {
       const tbody = document.getElementById('inventoryBody');
+      const canUpdate = nutoraAuth.hasPermission('inventory.update');
+
       tbody.innerHTML = list.map(p => {
         const qty = p.stock_quantity !== undefined ? p.stock_quantity : 45;
         const isLow = qty < 30;
         const isOut = qty === 0;
+        const imgSrc = p.image ? (p.image.startsWith('http') || p.image.startsWith('/') ? p.image : '../' + p.image) : '../assets/images/products/peanut-butter-classic.jpg';
 
         return `
           <tr>
             <td>
               <div style="display: flex; align-items: center; gap: 12px;">
-                <img src="../${p.image}" alt="" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
+                <img src="${imgSrc}" alt="${p.name}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
                 <div>
                   <strong>${p.name}</strong>
-                  <div style="font-size: 0.8rem; color: var(--color-muted-text);">${p.weight}</div>
+                  <div style="font-size: 0.8rem; color: var(--color-muted-text);">${p.weight || 'Standard Pack'}</div>
                 </div>
               </div>
             </td>
@@ -128,12 +138,14 @@
               </span>
             </td>
             <td>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <button onclick="adjustStock('${p.id}', -5)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">-5</button>
-                <button onclick="adjustStock('${p.id}', -1)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">-1</button>
-                <button onclick="adjustStock('${p.id}', 1)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">+1</button>
-                <button onclick="adjustStock('${p.id}', 10)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">+10</button>
-              </div>
+              ${canUpdate ? `
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <button onclick="adjustStock('${p.id}', -5)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">-5</button>
+                  <button onclick="adjustStock('${p.id}', -1)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">-1</button>
+                  <button onclick="adjustStock('${p.id}', 1)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">+1</button>
+                  <button onclick="adjustStock('${p.id}', 10)" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-weight: bold;">+10</button>
+                </div>
+              ` : '<span style="font-size: 0.75rem; color: var(--color-muted-text);">Read Only</span>'}
             </td>
             <td>
               ${isOut ? '<span class="badge" style="background: #F8D7DA; color: #721C24;">Out of Stock</span>' :
@@ -145,13 +157,25 @@
       }).join('');
     }
 
-    function adjustStock(prodId, delta) {
+    async function adjustStock(prodId, delta) {
+      if (!nutoraAuth.hasPermission('inventory.update')) {
+        alert('Access Denied: You do not have permission to adjust inventory stock levels.');
+        return;
+      }
+
       const p = invProducts.find(item => item.id === prodId);
       if (!p) return;
 
       const current = p.stock_quantity !== undefined ? p.stock_quantity : 45;
       p.stock_quantity = Math.max(0, current + delta);
+
+      // Save to nutoraDB and local storage
+      if (window.nutoraDB && typeof nutoraDB.saveProduct === 'function') {
+        await nutoraDB.saveProduct(p);
+      }
       localStorage.setItem('nutora_catalog_override', JSON.stringify(invProducts));
+      localStorage.setItem('nutora_db_products', JSON.stringify(invProducts));
+
       renderInventory(invProducts);
     }
 

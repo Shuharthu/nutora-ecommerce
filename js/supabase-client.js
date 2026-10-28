@@ -360,6 +360,22 @@ class NutoraDatabaseEngine {
     return product;
   }
 
+  async deleteProduct(id) {
+    let list = JSON.parse(localStorage.getItem('nutora_db_products') || '[]');
+    const target = list.find(p => p.id === id);
+    list = list.filter(p => p.id !== id);
+    localStorage.setItem('nutora_db_products', JSON.stringify(list));
+
+    if (this.isLive && this.client) {
+      try {
+        await this.client.from('products').delete().eq('id', id);
+      } catch (e) {}
+    }
+
+    this.recordAudit('PRODUCT_DELETED', 'products', id, target ? { name: target.name } : null, null);
+    return true;
+  }
+
   async createOrder(orderPayload) {
     // Trusted server-side calculation
     const products = await this.getProducts();

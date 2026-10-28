@@ -27,3 +27,4 @@ Thumbs.db
 # Testing
 coverage/
 preview*.png
+tmp_chrome_profile/

@@ -1,7 +1,7 @@
 /**
- * NUTORA — Unified Administrative Core Engine
- * Enforces Role-Based Access Control (RBAC), Mobile Sidebar,
- * and Super Admin Credentials Management across all /admin/ pages.
+ * NUTORA — Unified Administrative Core Engine with Granular RBAC
+ * Enforces Role-Based Access Control (RBAC), Granular Permission Checks,
+ * Mobile Sidebar, and Super Admin Management across all /admin/ pages.
  */
 
 class NutoraAdminCore {
@@ -23,34 +23,109 @@ class NutoraAdminCore {
 
   enforceSecurity() {
     const user = nutoraAuth.currentUser;
-    const isSetup = nutoraAuth.isSuperAdminConfigured();
+    const path = window.location.pathname.toLowerCase();
 
     // Not logged in or not staff
-    if (!user || (user.role !== 'super_admin' && user.role !== 'editor')) {
-      if (!isSetup) {
-        window.location.href = 'setup.html';
+    if (!user || !nutoraAuth.isStaff()) {
+      if (!nutoraAuth.isSuperAdminConfigured()) {
+        window.location.href = '/admin/setup.html';
         return false;
       }
-      window.location.href = 'login.html';
+      window.location.href = '/login.html';
       return false;
     }
 
-    // Role-specific route protection: Only Super Admin can access users.html
-    const isUsersPage = window.location.pathname.includes('users.html');
-    if (isUsersPage && user.role !== 'super_admin') {
-      alert('Access Denied: Only Super Admin has authority to manage staff roles.');
-      window.location.href = 'index.html';
-      return false;
+    // Role & Permission Page Guards
+    if (path.includes('users.html') || path.endsWith('/users')) {
+      if (!nutoraAuth.hasPermission('users.manage')) {
+        alert('Access Denied: Only Super Admin has authority to manage staff roles and permissions.');
+        window.location.href = '/admin/index.html';
+        return false;
+      }
+    }
+
+    if (path.includes('settings.html') || path.endsWith('/settings')) {
+      if (!nutoraAuth.hasPermission('settings.manage')) {
+        alert('Access Denied: You do not have permission to modify store settings.');
+        window.location.href = '/admin/index.html';
+        return false;
+      }
+    }
+
+    if (path.includes('audit-logs.html') || path.endsWith('/audit-logs')) {
+      if (!nutoraAuth.hasPermission('audit.view')) {
+        alert('Access Denied: You do not have permission to view security audit logs.');
+        window.location.href = '/admin/index.html';
+        return false;
+      }
     }
 
     return true;
   }
 
   setupAdminUI() {
+    this.highlightActiveNavItem();
     this.updateSidebarUserPill();
+    this.filterNavigationByPermissions();
     this.injectMobileSidebar();
     this.injectSuperAdminModal();
     this.enhanceTopbar();
+  }
+
+  highlightActiveNavItem() {
+    const currentPath = window.location.pathname.toLowerCase();
+    const navItems = document.querySelectorAll('.admin-nav .admin-nav-item');
+
+    navItems.forEach(item => {
+      const href = (item.getAttribute('href') || '').toLowerCase();
+      // Remove active class first
+      item.classList.remove('active');
+
+      const cleanCurrent = currentPath.replace('.html', '').replace(/\/$/, '');
+      const cleanHref = href.replace('.html', '').replace(/\/$/, '');
+
+      if (cleanCurrent === cleanHref || 
+          (cleanCurrent.endsWith('/admin') && cleanHref.endsWith('/index')) ||
+          (cleanCurrent.endsWith('/admin/') && cleanHref.endsWith('/index')) ||
+          currentPath.endsWith(href)) {
+        item.classList.add('active');
+      }
+    });
+  }
+
+  filterNavigationByPermissions() {
+    const user = nutoraAuth.currentUser;
+    if (!user) return;
+
+    // Users module: Super Admin only
+    if (!nutoraAuth.hasPermission('users.manage')) {
+      const usersNav = document.querySelector('.admin-nav a[href*="users"]');
+      if (usersNav) usersNav.style.display = 'none';
+    }
+
+    // Settings module
+    if (!nutoraAuth.hasPermission('settings.manage')) {
+      const settingsNav = document.querySelector('.admin-nav a[href*="settings"]');
+      if (settingsNav) settingsNav.style.display = 'none';
+    }
+
+    // Audit logs module
+    if (!nutoraAuth.hasPermission('audit.view')) {
+      const auditNav = document.querySelector('.admin-nav a[href*="audit-logs"]');
+      if (auditNav) auditNav.style.display = 'none';
+    }
+
+    // Coupons module
+    if (!nutoraAuth.hasPermission('coupons.manage')) {
+      const couponNav = document.querySelector('.admin-nav a[href*="coupons"]');
+      if (couponNav) couponNav.style.display = 'none';
+    }
+
+    // Reviews module
+    if (!nutoraAuth.hasPermission('reviews.moderate')) {
+      const reviewNav = document.querySelector('.admin-nav a[href*="reviews"]');
+      if (reviewNav) reviewNav.style.display = 'none';
+    }
   }
 
   updateSidebarUserPill() {
@@ -60,17 +135,20 @@ class NutoraAdminCore {
     const userPill = document.querySelector('.admin-user-pill');
     if (userPill) {
       const isSuper = user.role === 'super_admin';
+      const roleBadgeText = isSuper ? 'SUPER ADMIN' : (user.role === 'admin' ? 'ADMIN' : 'EDITOR');
+      const badgeClass = isSuper ? 'badge-gold' : (user.role === 'admin' ? 'badge-gold' : 'badge-green');
+
       userPill.innerHTML = `
         <div style="flex-grow: 1; min-width: 0; padding-right: 8px;">
           <div style="font-size: 0.85rem; font-weight: 700; color: #FFF9EB; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-            ${user.fullName || 'Admin User'}
+            ${user.fullName || 'Staff Member'}
           </div>
           <div style="font-size: 0.74rem; color: #B2ACA0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
             ${user.email}
           </div>
           <div style="display: flex; gap: 6px; align-items: center; margin-top: 6px;">
-            <span class="badge ${isSuper ? 'badge-gold' : 'badge-green'}" style="font-size: 0.65rem; padding: 2px 8px;">
-              ${user.role.toUpperCase()}
+            <span class="badge ${badgeClass}" style="font-size: 0.65rem; padding: 2px 8px;">
+              ${roleBadgeText}
             </span>
             ${isSuper ? `
               <button onclick="window.nutoraAdmin.openSuperAdminModal()" title="Customize Super Admin Credentials" style="background: none; border: none; color: var(--color-warm-gold); font-size: 0.85rem; cursor: pointer; padding: 0 4px;">
@@ -79,16 +157,8 @@ class NutoraAdminCore {
             ` : ''}
           </div>
         </div>
-        <a href="../index.html" title="View Storefront" style="color: var(--color-warm-gold); font-size: 1.25rem; flex-shrink: 0; text-decoration: none;">🌐</a>
+        <a href="/index.html" title="View Storefront" style="color: var(--color-warm-gold); font-size: 1.25rem; flex-shrink: 0; text-decoration: none;">🌐</a>
       `;
-    }
-
-    // Hide User Roles link in sidebar if logged in as Editor
-    if (user.role === 'editor') {
-      const usersNav = document.querySelector('.admin-nav a[href*="users.html"]');
-      if (usersNav) {
-        usersNav.style.display = 'none';
-      }
     }
   }
 
@@ -138,7 +208,7 @@ class NutoraAdminCore {
     const topbar = document.querySelector('.admin-topbar');
     if (!topbar) return;
 
-    // Check if right actions wrapper exists
+    // Find right actions wrapper
     let actions = topbar.querySelector('.admin-topbar-actions');
     if (!actions) {
       const existingDiv = topbar.querySelector('div:last-child');
@@ -157,7 +227,6 @@ class NutoraAdminCore {
       actions.style.alignItems = 'center';
       actions.style.flexWrap = 'wrap';
 
-      // Ensure Profile button and Sign Out exist
       actions.innerHTML = `
         ${isSuper ? `
           <button onclick="window.nutoraAdmin.openSuperAdminModal()" class="btn btn-gold btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
@@ -165,7 +234,7 @@ class NutoraAdminCore {
             <span>Super Admin Settings</span>
           </button>
         ` : ''}
-        <a href="../shop.html" target="_blank" class="btn btn-secondary btn-sm">Storefront ↗</a>
+        <a href="/shop.html" target="_blank" class="btn btn-secondary btn-sm">Storefront ↗</a>
         <button onclick="window.nutoraAdmin.logout()" class="btn btn-outline btn-sm">Sign Out</button>
       `;
     }
@@ -211,7 +280,7 @@ class NutoraAdminCore {
 
             <div style="margin-bottom: 16px;">
               <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">
-                New Master Password (নতুন পাসওয়ার্ড — পরিবর্তন না করতে চাইলে খালি রাখুন)
+                New Master Password (নতুন পাসওয়ার্ড — অপরিবর্তিত রাখতে চাইলে খালি রাখুন)
               </label>
               <input type="password" id="samPassword" minlength="8" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="••••••••">
             </div>
@@ -293,7 +362,7 @@ class NutoraAdminCore {
 
   async logout() {
     await nutoraAuth.logout();
-    window.location.href = 'login.html';
+    window.location.href = '/login.html';
   }
 }
 
