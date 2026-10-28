@@ -16,6 +16,77 @@
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/admin.css">
+
+  <style>
+    .perm-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    @media (max-width: 640px) {
+      .perm-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .perm-card {
+      background: #FAF8F2;
+      border: 1px solid var(--color-light-border);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .perm-group-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-deep-green);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px dashed var(--color-light-border);
+      padding-bottom: 4px;
+    }
+    .perm-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      user-select: none;
+    }
+    .perm-item input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--color-forest-green);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .perm-chip {
+      display: inline-block;
+      font-size: 0.68rem;
+      background: #EAE6DF;
+      color: var(--color-peanut-brown);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin: 2px;
+    }
+    .preset-btn {
+      background: white;
+      border: 1px solid var(--color-light-border);
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--color-deep-green);
+      transition: all 0.2s;
+    }
+    .preset-btn:hover {
+      background: #FFF9EB;
+      border-color: var(--color-warm-gold);
+    }
+  </style>
 </head>
 <body class="admin-body">
 
@@ -29,17 +100,17 @@
     </div>
 
     <nav class="admin-nav">
-      <a href="index.html" class="admin-nav-item">📊 Dashboard</a>
-      <a href="products.html" class="admin-nav-item">🍯 Products</a>
-      <a href="categories.html" class="admin-nav-item">📁 Categories</a>
-      <a href="inventory.html" class="admin-nav-item">📦 Inventory & Stock</a>
-      <a href="orders.html" class="admin-nav-item">🛒 Orders</a>
-      <a href="customers.html" class="admin-nav-item">👥 Customers</a>
-      <a href="coupons.html" class="admin-nav-item">🎟️ Coupons</a>
-      <a href="reviews.html" class="admin-nav-item">⭐ Reviews</a>
-      <a href="users.html" class="admin-nav-item active">🛡️ User Roles</a>
-      <a href="settings.html" class="admin-nav-item">⚙️ Store Settings</a>
-      <a href="audit-logs.html" class="admin-nav-item">📜 Audit Logs</a>
+      <a href="/admin/index.html" class="admin-nav-item">📊 Dashboard</a>
+      <a href="/admin/products.html" class="admin-nav-item">🍯 Products</a>
+      <a href="/admin/categories.html" class="admin-nav-item">📁 Categories</a>
+      <a href="/admin/inventory.html" class="admin-nav-item">📦 Inventory & Stock</a>
+      <a href="/admin/orders.html" class="admin-nav-item">🛒 Orders</a>
+      <a href="/admin/customers.html" class="admin-nav-item">👥 Customers</a>
+      <a href="/admin/coupons.html" class="admin-nav-item">🎟️ Coupons</a>
+      <a href="/admin/reviews.html" class="admin-nav-item">⭐ Reviews</a>
+      <a href="/admin/users.html" class="admin-nav-item active">🛡️ User Roles</a>
+      <a href="/admin/settings.html" class="admin-nav-item">⚙️ Store Settings</a>
+      <a href="/admin/audit-logs.html" class="admin-nav-item">📜 Audit Logs</a>
     </nav>
 
     <div class="admin-user-pill">
@@ -50,8 +121,8 @@
   <div class="admin-main">
     <header class="admin-topbar">
       <div>
-        <h1 style="font-size: 1.45rem; color: var(--color-deep-green);">Administrative Roles & Access Security</h1>
-        <span style="font-size: 0.85rem; color: var(--color-muted-text);">Only Super Admin has authority to create, configure, or deactivate staff accounts</span>
+        <h1 style="font-size: 1.45rem; color: var(--color-deep-green);">Administrative Roles & Granular Permissions</h1>
+        <span style="font-size: 0.85rem; color: var(--color-muted-text);">Only Super Admin has authority to create, configure, or adjust staff permissions</span>
       </div>
       <div class="admin-topbar-actions">
         <button onclick="openCreateStaffModal()" class="btn btn-primary btn-sm">+ Create New Staff Account</button>
@@ -61,7 +132,7 @@
     <main class="admin-content">
       <div style="padding: 16px 20px; background: #FFF9EB; border-left: 4px solid var(--color-honey-gold); border-radius: 6px; margin-bottom: 24px; font-size: 0.88rem; color: var(--color-peanut-brown); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
         <div>
-          <strong>🛡️ Super Admin Protection Policy Active:</strong> সাধারণ ব্যবহারকারী বা ভিজিটররা এই প্যানেলে কোনো অ্যাকাউন্ট তৈরি করতে পারবে না। কেবলমাত্র আপনি (সুপার অ্যাডমিন) নতুন অ্যাডমিন বা এডিটর তৈরি করতে পারবেন।
+          <strong>🛡️ Super Admin Protection Policy Active:</strong> সাধারণ ভিজিটররা কখনোই অ্যাডমিন বা এডিটর হতে পারবে না। আপনি (সুপার অ্যাডমিন) নিজ হাতে প্রতিটি অ্যাডমিন ও এডিটরকে সুনির্দিষ্ট পারমিশন (চেকবক্স) দিয়ে নিয়োগ করবেন।
         </div>
         <button onclick="window.nutoraAdmin.openSuperAdminModal()" class="btn btn-gold btn-sm" style="font-size: 0.78rem;">
           👑 Edit My Super Admin Profile
@@ -72,7 +143,7 @@
         <div class="admin-card-header">
           <div>
             <h3 style="font-size: 1.15rem; color: var(--color-deep-green); margin: 0;">Staff & Administrative Accounts</h3>
-            <span style="font-size: 0.82rem; color: var(--color-muted-text);">Active team members with administrative system access</span>
+            <span style="font-size: 0.82rem; color: var(--color-muted-text);">Active team members and their customized operational permissions</span>
           </div>
           <button onclick="openCreateStaffModal()" class="btn btn-secondary btn-sm">+ Add Staff</button>
         </div>
@@ -82,10 +153,10 @@
             <thead>
               <tr>
                 <th>Full Name</th>
-                <th>Email Address</th>
+                <th>Official Email</th>
                 <th>Phone</th>
                 <th>Role</th>
-                <th>Permissions & Scope</th>
+                <th>Granted Permissions & Scope</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -99,60 +170,162 @@
     </main>
   </div>
 
-  <!-- Create Staff Account Modal -->
-  <div id="createStaffModal" class="admin-modal-overlay">
-    <div class="admin-modal" style="max-width: 520px;">
-      <div class="admin-modal-header" style="background: var(--color-deep-green); color: white; border-radius: var(--radius-lg) var(--radius-lg) 0 0;">
+  <!-- Create / Edit Staff Account Modal with Granular Permission Checkboxes -->
+  <div id="staffModal" class="admin-modal-overlay">
+    <div class="admin-modal" style="max-width: 680px; max-height: 90vh; overflow-y: auto;">
+      <div class="admin-modal-header" style="background: var(--color-deep-green); color: white; border-radius: var(--radius-lg) var(--radius-lg) 0 0; position: sticky; top: 0; z-index: 10;">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 1.3rem;">🛡️</span>
           <div>
-            <h3 style="color: #FFF9EB; font-size: 1.15rem; margin: 0;">Create Administrative Account</h3>
-            <span style="font-size: 0.76rem; color: var(--color-warm-gold);">Super Admin Authorization Required</span>
+            <h3 id="staffModalTitle" style="color: #FFF9EB; font-size: 1.15rem; margin: 0;">Create Administrative Staff</h3>
+            <span style="font-size: 0.76rem; color: var(--color-warm-gold);">সুপার অ্যাডমিন দ্বারা পারমিশন ও রোল নির্ধারণ</span>
           </div>
         </div>
-        <button onclick="closeCreateStaffModal()" style="font-size: 1.5rem; color: #FFF9EB; background: none; border: none; cursor: pointer;">&times;</button>
+        <button onclick="closeStaffModal()" style="font-size: 1.5rem; color: #FFF9EB; background: none; border: none; cursor: pointer;">&times;</button>
       </div>
 
-      <form onsubmit="handleCreateStaff(event)">
+      <form id="staffForm" onsubmit="handleStaffSubmit(event)">
         <div class="admin-modal-body">
-          <div id="createStaffAlert" style="display: none; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 0.85rem;"></div>
+          <div id="staffModalAlert" style="display: none; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 0.85rem;"></div>
 
-          <div style="margin-bottom: 14px;">
-            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Full Name (নাম) *</label>
-            <input type="text" id="csName" required class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. Asif Rahman">
+          <input type="hidden" id="staffEditId">
+
+          <!-- Basic Info -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+            <div>
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Full Name (নাম) *</label>
+              <input type="text" id="sfName" required class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. Asif Rahman">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Email (অফিশিয়াল ইমেইল) *</label>
+              <input type="email" id="sfEmail" required class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. asif@nutorafood.com">
+            </div>
           </div>
 
-          <div style="margin-bottom: 14px;">
-            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Email Address (অফিশিয়াল ইমেইল) *</label>
-            <input type="email" id="csEmail" required class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. asif@nutorafood.com">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+            <div>
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Phone Number (ফোন)</label>
+              <input type="tel" id="sfPhone" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. 01712345678">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">
+                Password (পাসওয়ার্ড) <span id="pwdNotice" style="font-weight: 400; color: var(--color-muted-text);">*</span>
+              </label>
+              <input type="password" id="sfPassword" minlength="6" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="••••••••">
+            </div>
           </div>
 
-          <div style="margin-bottom: 14px;">
-            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Phone Number (ফোন)</label>
-            <input type="tel" id="csPhone" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="e.g. 01712345678">
-          </div>
-
-          <div style="margin-bottom: 14px;">
-            <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Initial Password (পাসওয়ার্ড — সর্বনিম্ন ৮ অক্ষর) *</label>
-            <input type="password" id="csPassword" required minlength="8" class="newsletter-input" style="width: 100%; border-radius: 6px;" placeholder="••••••••">
-          </div>
-
+          <!-- Role Selection -->
           <div style="margin-bottom: 16px;">
             <label style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--color-deep-green); margin-bottom: 4px;">Administrative Role *</label>
-            <select id="csRole" class="newsletter-input" style="width: 100%; border-radius: 6px; padding: 10px;">
-              <option value="editor">Editor — Can add/edit products, manage catalog & update inventory</option>
-              <option value="super_admin">Super Admin — Full supreme authority across all modules & settings</option>
+            <select id="sfRole" class="newsletter-input" style="width: 100%; border-radius: 6px; padding: 10px;" onchange="handleRoleChange(this.value)">
+              <option value="admin">Admin — Store Administrator (অর্ডার, ইনভেনটরি ও শপ ম্যানেজমেন্ট)</option>
+              <option value="editor">Editor — Content & Catalog Specialist (পণ্য ও ক্যাটালগ এডিটর)</option>
+              <option value="super_admin">Super Admin — Supreme Master Authority (সম্পূর্ণ মাস্টার এক্সেস)</option>
             </select>
           </div>
 
-          <p style="font-size: 0.78rem; color: var(--color-muted-text); margin: 0; line-height: 1.4;">
-            🛡️ সাধারণ ভিজিটররা কখনোই অ্যাডমিন রোল নিয়ে রেজিস্ট্রেশন করতে পারে না। শুধুমাত্র আপনি এখান থেকে নতুন স্টাফ তৈরি করতে পারবেন।
-          </p>
+          <!-- Granular Permission Matrix -->
+          <div style="margin-top: 18px; border-top: 1px solid var(--color-light-border); padding-top: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+              <div>
+                <label style="font-size: 0.88rem; font-weight: 700; color: var(--color-deep-green);">
+                  🛡️ Granular Permissions Matrix (চেকবক্স তালিকা)
+                </label>
+                <div style="font-size: 0.76rem; color: var(--color-muted-text);">সুপার অ্যাডমিন হিসেবে আপনি নির্দিষ্ট করে দিন সে কি কি কাজ করতে পারবে:</div>
+              </div>
+
+              <!-- Presets -->
+              <div style="display: flex; gap: 6px;">
+                <button type="button" class="preset-btn" onclick="applyPreset('admin')">Admin Defaults</button>
+                <button type="button" class="preset-btn" onclick="applyPreset('editor')">Editor Defaults</button>
+                <button type="button" class="preset-btn" onclick="applyPreset('all')">Select All</button>
+                <button type="button" class="preset-btn" onclick="applyPreset('none')">Clear</button>
+              </div>
+            </div>
+
+            <!-- Permission Checkbox Grid -->
+            <div class="perm-grid">
+              <!-- Products Group -->
+              <div class="perm-card">
+                <div class="perm-group-title"><span>🍯</span> <strong>Products & Catalog (পণ্য)</strong></div>
+                <label class="perm-item">
+                  <input type="checkbox" name="perm" value="products.create_edit">
+                  <span><strong>Create & Edit Products</strong> (নতুন পণ্য তৈরি ও এডিট)</span>
+                </label>
+                <label class="perm-item">
+                  <input type="checkbox" name="perm" value="products.publish">
+                  <span><strong>Publish / Draft</strong> (পণ্য লাইভ বা ড্রাফট করার ক্ষমতা)</span>
+                </label>
+                <label class="perm-item">
+                  <input type="checkbox" name="perm" value="products.delete">
+                  <span><strong>Delete Products</strong> (পণ্য মোছা বা আর্কাইভ করা)</span>
+                </label>
+              </div>
+
+              <!-- Inventory Group -->
+              <div class="perm-card">
+                <div class="perm-group-title"><span>📦</span> <strong>Inventory & Stock (ইনভেনটরি)</strong></div>
+                <label class="perm-item">
+                  <input type="checkbox" name="perm" value="inventory.update">
+                  <span><strong>Adjust Stock Levels</strong> (স্টক সংখ্যা বাড়ানো/কমানো)</span>
+                </label>
+                <div style="font-size: 0.74rem; color: var(--color-muted-text); margin-top: 8px; line-height: 1.3;">
+                  ✓ ব্যাচ প্রোডাকশন অনুযায়ী ইনভেনটরি আপডেট করার অনুমতি
+                </div>
+              </div>
+
+              <!-- Orders Group -->
+              <div class="perm-card">
+                <div class="perm-group-title"><span>🛒</span> <strong>Orders & Delivery (অর্ডার)</strong></div>
+                <label class="perm-item">
+                  <input type="checkbox" name="perm" value="orders.status">
+                  <span><strong>Update Order Status</strong> (প্যাকিং, শিপিং, ডেলিভার্ড)</span>
+                </label>
+                <label class="perm-item">
+                  <input type="checkbox" name="perm" value="orders.cancel">
+                  <span><strong>Cancel & Refund</strong> (অর্ডার বাতিল ও রিফান্ড অনুমোদন)</span>
+                </label>
+              </div>
+
+              <!-- Marketing & Reviews Group -->
+              <div class="perm-card">
+                <div class="perm-group-title"><span>🏷️</span> <strong>Marketing & Reviews (কুপন/রিভিউ)</strong></div>
+                <label class="perm-item">
+                  <input type="checkbox" name="perm" value="coupons.manage">
+                  <span><strong>Coupons & Discounts</strong> (কুপন কোড ও ছাড় তৈরি)</span>
+                </label>
+                <label class="perm-item">
+                  <input type="checkbox" name="perm" value="reviews.moderate">
+                  <span><strong>Moderate Reviews</strong> (গ্রাহক রিভিউ পাবলিশ/হাইড)</span>
+                </label>
+              </div>
+
+              <!-- Customers & Settings Group -->
+              <div class="perm-card" style="grid-column: 1 / -1;">
+                <div class="perm-group-title"><span>⚙️</span> <strong>Customers & Store Operations (গ্রাহক ও স্টোর)</strong></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  <label class="perm-item">
+                    <input type="checkbox" name="perm" value="customers.view">
+                    <span><strong>View Customer Profiles</strong> (গ্রাহকদের হিস্ট্রি ও ফোন দেখা)</span>
+                  </label>
+                  <label class="perm-item">
+                    <input type="checkbox" name="perm" value="settings.manage">
+                    <span><strong>Store Settings & Fees</strong> (ডেলিভারি চার্জ ও স্টোর তথ্য)</span>
+                  </label>
+                  <label class="perm-item">
+                    <input type="checkbox" name="perm" value="audit.view">
+                    <span><strong>Audit Security Logs</strong> (নিরাপত্তা ও অডিট লগ দেখা)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="admin-modal-footer">
-          <button type="button" onclick="closeCreateStaffModal()" class="btn btn-secondary btn-sm">Cancel</button>
-          <button type="submit" id="btnSubmitCreateStaff" class="btn btn-primary btn-sm">Create Staff Account</button>
+          <button type="button" onclick="closeStaffModal()" class="btn btn-secondary btn-sm">Cancel</button>
+          <button type="submit" id="btnSubmitStaff" class="btn btn-primary btn-sm">Save Staff Account</button>
         </div>
       </form>
     </div>
@@ -165,17 +338,32 @@
   <script src="../js/admin-core.js"></script>
 
   <script>
+    const PERM_LABELS = {
+      'products.create_edit': '🍯 Products',
+      'products.publish': '🚀 Publish',
+      'products.delete': '🗑️ Delete',
+      'inventory.update': '📦 Inventory',
+      'orders.status': '🛒 Orders',
+      'orders.cancel': '❌ Refund',
+      'coupons.manage': '🎟️ Coupons',
+      'reviews.moderate': '⭐ Reviews',
+      'customers.view': '👥 Customers',
+      'settings.manage': '⚙️ Settings',
+      'audit.view': '📜 Logs',
+      'users.manage': '🛡️ Users'
+    };
+
     function renderStaffUsers() {
       const allUsers = nutoraAuth.getUsers();
       // Filter staff only
-      const staffList = allUsers.filter(u => u.role === 'super_admin' || u.role === 'editor');
+      const staffList = allUsers.filter(u => ['super_admin', 'admin', 'editor'].includes(u.role));
       const tbody = document.getElementById('usersTableBody');
 
       if (staffList.length === 0) {
         tbody.innerHTML = `
           <tr>
             <td colspan="7" style="text-align: center; color: var(--color-muted-text); padding: 32px;">
-              No staff members recorded. Click "+ Create New Staff Account" to invite an editor.
+              No staff members recorded. Click "+ Create New Staff Account" to invite an admin or editor.
             </td>
           </tr>
         `;
@@ -184,8 +372,23 @@
 
       tbody.innerHTML = staffList.map(u => {
         const isSuper = u.role === 'super_admin';
+        const isAdmin = u.role === 'admin';
         const isSelf = nutoraAuth.currentUser && nutoraAuth.currentUser.id === u.id;
         const isActive = u.isActive !== false;
+
+        const roleBadge = isSuper ? '<span class="badge badge-gold" style="font-size: 0.72rem;">SUPER ADMIN</span>' :
+                          (isAdmin ? '<span class="badge badge-gold" style="font-size: 0.72rem;">ADMIN</span>' :
+                          '<span class="badge badge-green" style="font-size: 0.72rem;">EDITOR</span>');
+
+        // Permission chips
+        let permChips = '';
+        if (isSuper) {
+          permChips = '<span class="perm-chip" style="background: #FFF8E1; color: #B37D14; font-weight: 700;">👑 Full Store Authority</span>';
+        } else if (u.permissions && u.permissions.length > 0) {
+          permChips = u.permissions.map(p => `<span class="perm-chip">${PERM_LABELS[p] || p}</span>`).join(' ');
+        } else {
+          permChips = '<span style="font-size: 0.75rem; color: var(--color-muted-text);">No permissions granted</span>';
+        }
 
         return `
           <tr>
@@ -196,29 +399,31 @@
             </td>
             <td style="font-family: monospace; font-size: 0.88rem;">${u.email}</td>
             <td style="font-size: 0.85rem; color: var(--color-muted-text);">${u.phone || '—'}</td>
-            <td>
-              <span class="badge ${isSuper ? 'badge-gold' : 'badge-green'}" style="font-size: 0.72rem;">
-                ${isSuper ? 'SUPER ADMIN' : 'EDITOR'}
-              </span>
-            </td>
-            <td style="font-size: 0.82rem; color: var(--color-muted-text);">
-              ${isSuper ? 'Full Store & Team Authority' : 'Products, Inventory & Catalog Drafting'}
-            </td>
+            <td>${roleBadge}</td>
+            <td style="max-width: 280px;">${permChips}</td>
             <td>
               <span class="badge ${isActive ? 'badge-green' : 'badge-red'}" style="font-size: 0.72rem;">
                 ${isActive ? 'Active' : 'Deactivated'}
               </span>
             </td>
             <td>
-              ${isSelf ? `
-                <button onclick="window.nutoraAdmin.openSuperAdminModal()" class="btn btn-outline btn-sm" style="padding: 4px 10px; font-size: 0.78rem;">
-                  Edit Profile
-                </button>
-              ` : `
-                <button onclick="toggleUserStatus('${u.id}', ${!isActive})" class="btn btn-outline btn-sm" style="padding: 4px 10px; font-size: 0.78rem; color: ${isActive ? 'var(--color-danger)' : 'var(--color-success)'}; border-color: ${isActive ? 'var(--color-danger)' : 'var(--color-success)'};">
-                  ${isActive ? 'Deactivate' : 'Activate'}
-                </button>
-              `}
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                ${isSelf ? `
+                  <button onclick="window.nutoraAdmin.openSuperAdminModal()" class="btn btn-outline btn-sm" style="padding: 4px 10px; font-size: 0.78rem;">
+                    Edit Profile
+                  </button>
+                ` : `
+                  <button onclick="editStaff('${u.id}')" class="btn btn-secondary btn-sm" style="padding: 4px 8px; font-size: 0.78rem;">
+                    Edit Permissions
+                  </button>
+                  <button onclick="toggleUserStatus('${u.id}', ${!isActive})" class="btn btn-outline btn-sm" style="padding: 4px 8px; font-size: 0.78rem; color: ${isActive ? 'var(--color-danger)' : 'var(--color-success)'}; border-color: ${isActive ? 'var(--color-danger)' : 'var(--color-success)'};">
+                    ${isActive ? 'Deactivate' : 'Activate'}
+                  </button>
+                  <button onclick="deleteStaff('${u.id}')" class="btn btn-outline btn-sm" style="padding: 4px 6px; font-size: 0.78rem; color: #C0392B; border-color: #E0B4B4;" title="Delete Staff Account">
+                    🗑️
+                  </button>
+                `}
+              </div>
             </td>
           </tr>
         `;
@@ -226,57 +431,149 @@
     }
 
     function openCreateStaffModal() {
-      document.getElementById('csName').value = '';
-      document.getElementById('csEmail').value = '';
-      document.getElementById('csPhone').value = '';
-      document.getElementById('csPassword').value = '';
-      const alertBox = document.getElementById('createStaffAlert');
+      document.getElementById('staffEditId').value = '';
+      document.getElementById('staffModalTitle').textContent = 'Create Administrative Staff';
+      document.getElementById('sfName').value = '';
+      document.getElementById('sfEmail').value = '';
+      document.getElementById('sfEmail').removeAttribute('readonly');
+      document.getElementById('sfPhone').value = '';
+      document.getElementById('sfPassword').value = '';
+      document.getElementById('sfPassword').setAttribute('required', 'required');
+      document.getElementById('pwdNotice').textContent = '*';
+      document.getElementById('sfRole').value = 'admin';
+      
+      applyPreset('admin');
+
+      const alertBox = document.getElementById('staffModalAlert');
       if (alertBox) alertBox.style.display = 'none';
-      document.getElementById('createStaffModal').classList.add('active');
+
+      document.getElementById('staffModal').classList.add('active');
     }
 
-    function closeCreateStaffModal() {
-      document.getElementById('createStaffModal').classList.remove('active');
+    function editStaff(id) {
+      const users = nutoraAuth.getUsers();
+      const staff = users.find(u => u.id === id);
+      if (!staff) return;
+
+      document.getElementById('staffEditId').value = staff.id;
+      document.getElementById('staffModalTitle').textContent = `Edit Staff: ${staff.fullName}`;
+      document.getElementById('sfName').value = staff.fullName || '';
+      document.getElementById('sfEmail').value = staff.email || '';
+      document.getElementById('sfEmail').setAttribute('readonly', 'readonly');
+      document.getElementById('sfPhone').value = staff.phone || '';
+      document.getElementById('sfPassword').value = '';
+      document.getElementById('sfPassword').removeAttribute('required');
+      document.getElementById('pwdNotice').textContent = '(leave blank to keep unchanged)';
+      document.getElementById('sfRole').value = staff.role || 'editor';
+
+      // Set checkboxes
+      const perms = staff.permissions || [];
+      document.querySelectorAll('input[name="perm"]').forEach(cb => {
+        cb.checked = perms.includes(cb.value);
+      });
+
+      const alertBox = document.getElementById('staffModalAlert');
+      if (alertBox) alertBox.style.display = 'none';
+
+      document.getElementById('staffModal').classList.add('active');
     }
 
-    async function handleCreateStaff(e) {
+    function closeStaffModal() {
+      document.getElementById('staffModal').classList.remove('active');
+    }
+
+    function handleRoleChange(role) {
+      if (role === 'admin') applyPreset('admin');
+      else if (role === 'editor') applyPreset('editor');
+      else if (role === 'super_admin') applyPreset('all');
+    }
+
+    function applyPreset(preset) {
+      const checkboxes = document.querySelectorAll('input[name="perm"]');
+      if (preset === 'all') {
+        checkboxes.forEach(cb => cb.checked = true);
+      } else if (preset === 'none') {
+        checkboxes.forEach(cb => cb.checked = false);
+      } else if (preset === 'admin') {
+        checkboxes.forEach(cb => {
+          cb.checked = DEFAULT_ADMIN_PERMISSIONS.includes(cb.value);
+        });
+      } else if (preset === 'editor') {
+        checkboxes.forEach(cb => {
+          cb.checked = DEFAULT_EDITOR_PERMISSIONS.includes(cb.value);
+        });
+      }
+    }
+
+    function getSelectedPermissions() {
+      const selected = [];
+      document.querySelectorAll('input[name="perm"]:checked').forEach(cb => {
+        selected.push(cb.value);
+      });
+      return selected;
+    }
+
+    async function handleStaffSubmit(e) {
       e.preventDefault();
-      const btn = document.getElementById('btnSubmitCreateStaff');
-      const alertBox = document.getElementById('createStaffAlert');
+      const btn = document.getElementById('btnSubmitStaff');
+      const alertBox = document.getElementById('staffModalAlert');
 
-      const name = document.getElementById('csName').value.trim();
-      const email = document.getElementById('csEmail').value.trim();
-      const phone = document.getElementById('csPhone').value.trim();
-      const pass = document.getElementById('csPassword').value;
-      const role = document.getElementById('csRole').value;
+      const editId = document.getElementById('staffEditId').value;
+      const name = document.getElementById('sfName').value.trim();
+      const email = document.getElementById('sfEmail').value.trim();
+      const phone = document.getElementById('sfPhone').value.trim();
+      const pass = document.getElementById('sfPassword').value;
+      const role = document.getElementById('sfRole').value;
+      const permissions = getSelectedPermissions();
 
       try {
         btn.disabled = true;
-        btn.textContent = 'Creating Account...';
+        btn.textContent = 'Saving Account...';
 
-        await nutoraAuth.createStaffAccount(name, email, phone, pass, role);
+        if (editId) {
+          // Update existing staff
+          const updates = {
+            fullName: name,
+            phone: phone,
+            role: role,
+            permissions: permissions
+          };
+          if (pass && pass.trim().length >= 6) {
+            updates.password = pass.trim();
+          }
+          await nutoraAuth.updateStaffAccount(editId, updates);
 
-        alertBox.style.display = 'block';
-        alertBox.style.background = '#E8F5E9';
-        alertBox.style.color = '#2E7D32';
-        alertBox.style.border = '1px solid #C8E6C9';
-        alertBox.textContent = `✓ Staff account for ${name} (${role.toUpperCase()}) created successfully!`;
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#E8F5E9';
+          alertBox.style.color = '#2E7D32';
+          alertBox.style.border = '1px solid #C8E6C9';
+          alertBox.textContent = `✓ Staff account for ${name} updated successfully!`;
+        } else {
+          // Create new staff
+          await nutoraAuth.createStaffAccount(name, email, phone, pass, role, permissions);
+
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#E8F5E9';
+          alertBox.style.color = '#2E7D32';
+          alertBox.style.border = '1px solid #C8E6C9';
+          alertBox.textContent = `✓ New staff account for ${name} (${role.toUpperCase()}) created with ${permissions.length} permissions!`;
+        }
 
         renderStaffUsers();
 
         setTimeout(() => {
-          closeCreateStaffModal();
+          closeStaffModal();
           btn.disabled = false;
-          btn.textContent = 'Create Staff Account';
+          btn.textContent = 'Save Staff Account';
         }, 1000);
       } catch (err) {
         alertBox.style.display = 'block';
         alertBox.style.background = '#FFEBEE';
         alertBox.style.color = '#C62828';
         alertBox.style.border = '1px solid #FFCDD2';
-        alertBox.textContent = err.message || 'Failed to create staff account.';
+        alertBox.textContent = err.message || 'Failed to save staff account.';
         btn.disabled = false;
-        btn.textContent = 'Create Staff Account';
+        btn.textContent = 'Save Staff Account';
       }
     }
 
@@ -292,6 +589,23 @@
 
       try {
         await nutoraAuth.updateStaffStatus(id, newStatus);
+        renderStaffUsers();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    async function deleteStaff(id) {
+      const allUsers = nutoraAuth.getUsers();
+      const target = allUsers.find(u => u.id === id);
+      if (!target) return;
+
+      if (!confirm(`⚠️ Are you sure you want to PERMANENTLY delete staff account for "${target.fullName || target.email}"? This action cannot be undone.`)) {
+        return;
+      }
+
+      try {
+        await nutoraAuth.deleteStaffAccount(id);
         renderStaffUsers();
       } catch (err) {
         alert(err.message);

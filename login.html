@@ -70,6 +70,13 @@
       box-shadow: 0 4px 12px rgba(23, 69, 47, 0.25);
     }
 
+    .role-pill.active-admin {
+      background: #E8F5E9 !important;
+      color: var(--color-deep-green) !important;
+      border: 2px solid var(--color-forest-green) !important;
+      box-shadow: 0 4px 12px rgba(23, 69, 47, 0.25);
+    }
+
     .role-pill.active-superadmin {
       background: #FFF9EB !important;
       color: #103523 !important;
@@ -160,7 +167,7 @@
           </button>
         </div>
 
-        <div class="role-pills-grid" id="rolePillsGrid">
+        <div class="role-pills-grid" id="rolePillsGrid" style="grid-template-columns: repeat(4, 1fr);">
           <div id="pillCustomer" class="role-pill active-customer" onclick="selectRolePill('customer')">
             <div>👤 Customer</div>
             <div class="role-pill-subtitle">সাধারণ ক্রেতা</div>
@@ -168,7 +175,12 @@
 
           <div id="pillEditor" class="role-pill" onclick="selectRolePill('editor')">
             <div>✏️ Editor</div>
-            <div class="role-pill-subtitle">কিচেন স্টাফ</div>
+            <div class="role-pill-subtitle">ক্যাটালগ এডিটর</div>
+          </div>
+
+          <div id="pillAdmin" class="role-pill" onclick="selectRolePill('admin')">
+            <div>🛡️ Admin</div>
+            <div class="role-pill-subtitle">স্টোর অ্যাডমিন</div>
           </div>
 
           <div id="pillSuperAdmin" class="role-pill" onclick="selectRolePill('super_admin')">
@@ -289,7 +301,8 @@
     function resetRolePills() {
       const pCust = document.getElementById('pillCustomer');
       const pEdit = document.getElementById('pillEditor');
-      const pAdmin = document.getElementById('pillSuperAdmin');
+      const pAd = document.getElementById('pillAdmin');
+      const pSuper = document.getElementById('pillSuperAdmin');
       const feedback = document.getElementById('roleFeedbackBox');
       const feedbackText = document.getElementById('roleFeedbackText');
       const feedbackIcon = document.getElementById('roleFeedbackIcon');
@@ -297,7 +310,8 @@
 
       pCust.className = 'role-pill active-customer';
       pEdit.className = 'role-pill';
-      pAdmin.className = 'role-pill';
+      pAd.className = 'role-pill';
+      pSuper.className = 'role-pill';
 
       feedback.style.background = '#FAF8F2';
       feedback.style.border = '1px solid var(--color-light-border)';
@@ -318,7 +332,8 @@
 
       const pCust = document.getElementById('pillCustomer');
       const pEdit = document.getElementById('pillEditor');
-      const pAdmin = document.getElementById('pillSuperAdmin');
+      const pAd = document.getElementById('pillAdmin');
+      const pSuper = document.getElementById('pillSuperAdmin');
       const feedback = document.getElementById('roleFeedbackBox');
       const feedbackText = document.getElementById('roleFeedbackText');
       const feedbackIcon = document.getElementById('roleFeedbackIcon');
@@ -332,7 +347,8 @@
         detectedRole = 'super_admin';
         pCust.className = 'role-pill';
         pEdit.className = 'role-pill';
-        pAdmin.className = 'role-pill active-superadmin';
+        pAd.className = 'role-pill';
+        pSuper.className = 'role-pill active-superadmin';
 
         feedback.style.background = '#FFF8E1';
         feedback.style.border = '1px solid #FFE082';
@@ -341,11 +357,27 @@
 
         btn.innerHTML = '👑 Sign In to Super Admin Dashboard';
         btn.className = 'btn btn-gold';
+      } else if (detection.role === 'admin') {
+        // STORE ADMIN DETECTED
+        detectedRole = 'admin';
+        pCust.className = 'role-pill';
+        pSuper.className = 'role-pill greyed-out';
+        pEdit.className = 'role-pill';
+        pAd.className = 'role-pill active-admin';
+
+        feedback.style.background = '#E8F5E9';
+        feedback.style.border = '1px solid #C8E6C9';
+        feedbackIcon.textContent = '🛡️';
+        feedbackText.innerHTML = `<strong style="color: #17452F;">স্টোর অ্যাডমিনিস্ট্রেটর সনাক্ত হয়েছে:</strong> অনুমোদিত অ্যাডমিন ড্যাশবোর্ডে প্রবেশ করবেন।`;
+
+        btn.innerHTML = '🛡️ Sign In to Admin Dashboard';
+        btn.className = 'btn btn-primary';
       } else if (detection.role === 'editor') {
         // EDITOR DETECTED
         detectedRole = 'editor';
         pCust.className = 'role-pill';
-        pAdmin.className = 'role-pill greyed-out';
+        pSuper.className = 'role-pill greyed-out';
+        pAd.className = 'role-pill greyed-out';
         pEdit.className = 'role-pill active-editor';
 
         feedback.style.background = '#E8F5E9';
@@ -356,11 +388,12 @@
         btn.innerHTML = '✏️ Sign In as Kitchen Editor';
         btn.className = 'btn btn-primary';
       } else {
-        // NORMAL CUSTOMER USER -> AUTOMATICALLY GREY OUT ADMIN AND EDITOR
+        // NORMAL CUSTOMER USER -> AUTOMATICALLY GREY OUT ADMIN, SUPER ADMIN, AND EDITOR
         detectedRole = 'customer';
         pCust.className = 'role-pill active-customer';
         pEdit.className = 'role-pill greyed-out';
-        pAdmin.className = 'role-pill greyed-out';
+        pAd.className = 'role-pill greyed-out';
+        pSuper.className = 'role-pill greyed-out';
 
         feedback.style.background = '#F5F5F5';
         feedback.style.border = '1px solid #E0E0E0';
@@ -375,25 +408,29 @@
     function selectRolePill(role) {
       const email = document.getElementById('loginEmail').value.trim();
       if (email.includes('@')) {
-        // If email already typed, keep reactive check
         handleEmailInput(email);
         return;
       }
 
-      // If email box empty, allow quick switch
       const pCust = document.getElementById('pillCustomer');
       const pEdit = document.getElementById('pillEditor');
-      const pAdmin = document.getElementById('pillSuperAdmin');
+      const pAd = document.getElementById('pillAdmin');
+      const pSuper = document.getElementById('pillSuperAdmin');
       const btn = document.getElementById('btnLogin');
 
       pCust.className = 'role-pill';
       pEdit.className = 'role-pill';
-      pAdmin.className = 'role-pill';
+      pAd.className = 'role-pill';
+      pSuper.className = 'role-pill';
 
       if (role === 'super_admin') {
-        pAdmin.className = 'role-pill active-superadmin';
+        pSuper.className = 'role-pill active-superadmin';
         btn.textContent = '👑 Sign In as Super Admin';
         btn.className = 'btn btn-gold';
+      } else if (role === 'admin') {
+        pAd.className = 'role-pill active-admin';
+        btn.textContent = '🛡️ Sign In as Admin';
+        btn.className = 'btn btn-primary';
       } else if (role === 'editor') {
         pEdit.className = 'role-pill active-editor';
         btn.textContent = '✏️ Sign In as Editor';
@@ -425,10 +462,10 @@
         alertBox.textContent = `✓ Logged in as ${user.fullName} (${user.role.toUpperCase()})`;
 
         setTimeout(() => {
-          if (user.role === 'super_admin' || user.role === 'editor') {
-            window.location.href = 'admin/index.html';
+          if (['super_admin', 'admin', 'editor'].includes(user.role)) {
+            window.location.href = '/admin/index.html';
           } else {
-            window.location.href = 'account.html';
+            window.location.href = '/account.html';
           }
         }, 700);
       } catch (err) {
